@@ -21,8 +21,8 @@ getgenv().IxaBuloHubClosed = false
 local IxaBuloHub = {}
 
 IxaBuloHub.Appearance = {
-    Title = "BuloHub",
-    Subtitle = "Verify Key to enjoy BuloHub",
+    Title = "Ixa & Bulo hub",
+    Subtitle = "Verify Key to enjoy",
     Icon = "rbxassetid://95721401302279",
     IconSize = UDim2.new(0, 30, 0, 30)
 }
@@ -49,12 +49,12 @@ IxaBuloHub.Theme = {
     Accent = Color3.fromRGB(0, 120, 255),
     AccentHover = Color3.fromRGB(30, 144, 255),
     AccentLight = Color3.fromRGB(90, 180, 255),
-    Background = Color3.fromRGB(18, 28, 50),
+    Background = Color3.fromRGB(8, 12, 22),
     BackgroundGlass = Color3.fromRGB(12, 18, 32),
-    Header = Color3.fromRGB(22, 36, 65),
-    Input = Color3.fromRGB(28, 42, 72),
+    Header = Color3.fromRGB(14, 22, 38),
+    Input = Color3.fromRGB(18, 28, 48),
     Text = Color3.fromRGB(255, 255, 255),
-    TextDim = Color3.fromRGB(180, 190, 220),
+    TextDim = Color3.fromRGB(140, 150, 180),
     Success = Color3.fromRGB(50, 205, 110),
     Error = Color3.fromRGB(245, 70, 90),
     Warning = Color3.fromRGB(255, 180, 50),
@@ -399,15 +399,71 @@ local function formatDate()
 end
 
 local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowIntensity)
-    cornerRadius = cornerRadius or 12
-    thickness = thickness or 1
-    local s = Instance.new("UIStroke", targetFrame)
-    s.Color = getAccent()
-    s.Thickness = thickness
-    s.Transparency = 0.25
-    s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    Instance.new("UICorner", targetFrame).CornerRadius = UDim.new(0, cornerRadius)
-    return s, nil
+    cornerRadius = cornerRadius or 4
+    thickness = thickness or 2
+    glowIntensity = glowIntensity or 0.5
+    local borderContainer = Instance.new("Frame")
+    borderContainer.Name = "FlowingBorder"
+    borderContainer.Size = UDim2.new(1, thickness * 2, 1, thickness * 2)
+    borderContainer.Position = UDim2.new(0, -thickness, 0, -thickness)
+    borderContainer.BackgroundTransparency = 1
+    borderContainer.ZIndex = (targetFrame.ZIndex or 1) - 1
+    borderContainer.Parent = targetFrame
+    local borderGradient = Instance.new("Frame")
+    borderGradient.Size = UDim2.new(1, 0, 1, 0)
+    borderGradient.BackgroundTransparency = 0.85
+    borderGradient.BackgroundColor3 = getAccent()
+    borderGradient.BorderSizePixel = 0
+    borderGradient.ZIndex = borderContainer.ZIndex
+    borderGradient.Parent = borderContainer
+    local uiCorner = Instance.new("UICorner", borderGradient)
+    uiCorner.CornerRadius = UDim.new(0, cornerRadius + thickness)
+    local uiStroke = Instance.new("UIStroke", borderGradient)
+    uiStroke.Color = getAccent()
+    uiStroke.Thickness = thickness
+    uiStroke.Transparency = 0.3
+    local flowLight = Instance.new("Frame")
+    flowLight.Size = UDim2.new(0.3, 0, 1, 0)
+    flowLight.Position = UDim2.new(-0.3, 0, 0, 0)
+    flowLight.BackgroundColor3 = getAccentLight()
+    flowLight.BackgroundTransparency = 0.6
+    flowLight.BorderSizePixel = 0
+    flowLight.ZIndex = borderContainer.ZIndex + 1
+    flowLight.Parent = borderContainer
+    local flowCorner = Instance.new("UICorner", flowLight)
+    flowCorner.CornerRadius = UDim.new(0, cornerRadius + thickness)
+    local flowGradient = Instance.new("UIGradient", flowLight)
+    flowGradient.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 1),
+        NumberSequenceKeypoint.new(0.3, 0.7),
+        NumberSequenceKeypoint.new(0.5, 0.3),
+        NumberSequenceKeypoint.new(0.7, 0.7),
+        NumberSequenceKeypoint.new(1, 1)
+    })
+    local flowConnection
+    local angle = 0
+    flowConnection = RunService.RenderStepped:Connect(function(dt)
+        if not borderContainer.Parent then
+            if flowConnection then flowConnection:Disconnect() end
+            return
+        end
+        angle = (angle + dt * 1.5) % (2 * math.pi)
+        local xPos = -0.3 + (math.sin(angle) + 1) / 2 * 1.6
+        flowLight.Position = UDim2.new(xPos, 0, 0, 0)
+    end)
+    table.insert(Internal.FlowConnections, flowConnection)
+    local shadow = Instance.new("ImageLabel")
+    shadow.Name = "GlowShadow"
+    shadow.Size = UDim2.new(1, thickness * 4, 1, thickness * 4)
+    shadow.Position = UDim2.new(0, -thickness * 2, 0, -thickness * 2)
+    shadow.BackgroundTransparency = 1
+    shadow.Image = "rbxassetid://13127777272"
+    shadow.ImageTransparency = 0.6 - glowIntensity * 0.3
+    shadow.ScaleType = Enum.ScaleType.Slice
+    shadow.SliceCenter = Rect.new(20, 20, 20, 20)
+    shadow.ZIndex = borderContainer.ZIndex - 1
+    shadow.Parent = borderContainer
+    return borderContainer, flowConnection
 end
 
 local function applyGlassStyle(frame, transparency)
@@ -703,21 +759,64 @@ local function CreateDoorOverlay(parentFrame, width, height)
     overlay.BackgroundTransparency = 1
     overlay.ClipsDescendants = true
     overlay.ZIndex = 50
-    overlay.Visible = false
     overlay.Parent = parentFrame
-    -- doors disabled to fix vertical seam bug
+    local leftDoor = Instance.new("Frame")
+    leftDoor.Name = "LeftDoor"
+    leftDoor.Size = UDim2.new(0.5, 0, 1, 0)
+    leftDoor.Position = UDim2.new(0, 0, 0, 0)
+    leftDoor.BackgroundColor3 = getHeader()
+    leftDoor.BorderSizePixel = 0
+    leftDoor.ZIndex = 51
+    leftDoor.Parent = overlay
+    local rightDoor = Instance.new("Frame")
+    rightDoor.Name = "RightDoor"
+    rightDoor.Size = UDim2.new(0.5, 0, 1, 0)
+    rightDoor.Position = UDim2.new(0.5, 0, 0, 0)
+    rightDoor.BackgroundColor3 = getHeader()
+    rightDoor.BorderSizePixel = 0
+    rightDoor.ZIndex = 51
+    rightDoor.Parent = overlay
+    for _, door in ipairs({leftDoor, rightDoor}) do
+        local gradient = Instance.new("UIGradient", door)
+        gradient.Transparency = NumberSequence.new({
+            NumberSequenceKeypoint.new(0, 0),
+            NumberSequenceKeypoint.new(0.5, 0.1),
+            NumberSequenceKeypoint.new(1, 0)
+        })
+        gradient.Rotation = 90
+    end
+    local logoSize = math.min(width, height) * 0.28
     local logoImage = Instance.new("ImageLabel")
     logoImage.Name = "DoorLogo"
-    logoImage.Size = UDim2.new(0, 0, 0, 0)
-    logoImage.Visible = false
+    logoImage.Size = UDim2.new(0, logoSize, 0, logoSize)
+    logoImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+    logoImage.AnchorPoint = Vector2.new(0.5, 0.5)
+    logoImage.BackgroundTransparency = 1
+    logoImage.Image = getLogoIcon()
+    logoImage.ImageColor3 = getText()
+    logoImage.ScaleType = Enum.ScaleType.Fit
+    logoImage.ZIndex = 54
     logoImage.Parent = overlay
-    local halfWidth = 0
+    local halfWidth = math.ceil(width / 2)
     local function openDoors(callback)
+        TweenService:Create(logoImage, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {ImageTransparency = 1, ImageColor3 = getAccent()}):Play()
+        task.wait(0.2)
+        TweenService:Create(leftDoor, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(0, -halfWidth, 0, 0)}):Play()
+        TweenService:Create(rightDoor, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(1, 0, 0, 0)}):Play()
+        task.wait(0.55)
         overlay.Visible = false
         if callback then callback() end
     end
     local function closeDoors(callback)
-        overlay.Visible = false
+        overlay.Visible = true
+        leftDoor.Position = UDim2.new(0, -halfWidth, 0, 0)
+        rightDoor.Position = UDim2.new(1, 0, 0, 0)
+        logoImage.ImageTransparency = 1
+        TweenService:Create(leftDoor, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+        TweenService:Create(rightDoor, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0, 0)}):Play()
+        task.wait(0.5)
+        TweenService:Create(logoImage, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {ImageTransparency = 0}):Play()
+        task.wait(0.35)
         if callback then callback() end
     end
     return {overlay = overlay, open = openDoors, close = closeDoors}
@@ -1233,11 +1332,9 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
             div.Parent = divWrapper
         end
     end
-    panel.Visible = false
     createFlowingBorder(panel, 8, 1, 0.3)
     local function toggle(changelogIcon, container, currentContainerWidth)
         isOpen = not isOpen
-        panel.Visible = true
         if isOpen then
             TweenService:Create(panelStroke, TweenInfo.new(0.2), {Transparency = 0.3}):Play()
             TweenService:Create(panel, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, panelWidth, 0, panelHeight)}):Play()
@@ -1248,7 +1345,7 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
             TweenService:Create(panel, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, panelHeight)}):Play()
             TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, currentContainerWidth, 0, panelHeight)}):Play()
             if changelogIcon then TweenService:Create(changelogIcon, TweenInfo.new(0.3), {Rotation = 0}):Play() end
-            task.delay(0.32, function() if not isOpen then panel.Visible = false end end)
+
         end
     end
     panelClose.MouseButton1Click:Connect(function() if isOpen then toggle(nil, parent, windowWidth) end end)
@@ -1577,11 +1674,9 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
         end
     end)
     panel.Destroying:Connect(function() clockRunning = false end)
-    panel.Visible = false
     createFlowingBorder(panel, 8, 1, 0.3)
     local function toggle(userIcon, container, baseWidth)
         isOpen = not isOpen
-        panel.Visible = true
         if isOpen then
             TweenService:Create(panelStroke, TweenInfo.new(0.2), {Transparency = 0.3}):Play()
             TweenService:Create(panel, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, panelWidth, 0, panelHeight)}):Play()
@@ -1590,7 +1685,7 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
             TweenService:Create(panelStroke, TweenInfo.new(0.2), {Transparency = 1}):Play()
             TweenService:Create(panel, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, panelHeight)}):Play()
             TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, baseWidth, 0, panelHeight)}):Play()
-            task.delay(0.32, function() if not isOpen then panel.Visible = false end end)
+
         end
     end
     panelClose.MouseButton1Click:Connect(function() if isOpen then toggle(nil, parent, windowWidth) end end)
@@ -1612,7 +1707,7 @@ local function BuildCenteredUI(windowWidth, windowHeight, panelHeight, userPanel
     mainFrame.Position = UDim2.new(0.5, 0, 0, 0)
     mainFrame.AnchorPoint = Vector2.new(0.5, 0)
     mainFrame.BackgroundColor3 = getBackground()
-    mainFrame.BackgroundTransparency = 0.08
+    mainFrame.BackgroundTransparency = 0.85
     mainFrame.BorderSizePixel = 0
     mainFrame.Parent = container
     Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 12)
