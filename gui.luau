@@ -21,8 +21,8 @@ getgenv().IxaBuloHubClosed = false
 local IxaBuloHub = {}
 
 IxaBuloHub.Appearance = {
-    Title = "Ixa & Bulo Hub",
-    Subtitle = "Enter your key to continue",
+    Title = "BuloHub",
+    Subtitle = "Verify Key to enjoy BuloHub",
     Icon = "rbxassetid://95721401302279",
     IconSize = UDim2.new(0, 30, 0, 30)
 }
@@ -33,7 +33,7 @@ IxaBuloHub.Links = {
 }
 
 IxaBuloHub.Storage = {
-    FileName = "IxaBuloHub_Key",
+    FileName = "BuloHub_Key",
     Remember = true,
     AutoLoad = true
 }
@@ -108,7 +108,7 @@ local IconFiles = {
     loading = "nonicons--loading-16.png",
     close = "material-symbols--dangerous-outline.png",
     changelog = "ant-design--sync-outlined.png",
-    logo = "Patriot.png",
+    logo = "BuloHub.png",
     user = "U.png",
     clock = "Clock.png",
     cart = "Cart.png"
@@ -132,7 +132,7 @@ local FallbackIcons = {
 }
 
 local CachedIcons = {}
-local FolderName = "IxaBuloHub"
+local FolderName = "BuloHub"
 local IconsFolder = "Icons"
 local DefaultLogoAsset = "rbxassetid://95721401302279"
 
@@ -399,71 +399,15 @@ local function formatDate()
 end
 
 local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowIntensity)
-    cornerRadius = cornerRadius or 4
-    thickness = thickness or 2
-    glowIntensity = glowIntensity or 0.5
-    local borderContainer = Instance.new("Frame")
-    borderContainer.Name = "FlowingBorder"
-    borderContainer.Size = UDim2.new(1, thickness * 2, 1, thickness * 2)
-    borderContainer.Position = UDim2.new(0, -thickness, 0, -thickness)
-    borderContainer.BackgroundTransparency = 1
-    borderContainer.ZIndex = (targetFrame.ZIndex or 1) - 1
-    borderContainer.Parent = targetFrame
-    local borderGradient = Instance.new("Frame")
-    borderGradient.Size = UDim2.new(1, 0, 1, 0)
-    borderGradient.BackgroundTransparency = 0.85
-    borderGradient.BackgroundColor3 = getAccent()
-    borderGradient.BorderSizePixel = 0
-    borderGradient.ZIndex = borderContainer.ZIndex
-    borderGradient.Parent = borderContainer
-    local uiCorner = Instance.new("UICorner", borderGradient)
-    uiCorner.CornerRadius = UDim.new(0, cornerRadius + thickness)
-    local uiStroke = Instance.new("UIStroke", borderGradient)
-    uiStroke.Color = getAccent()
-    uiStroke.Thickness = thickness
-    uiStroke.Transparency = 0.3
-    local flowLight = Instance.new("Frame")
-    flowLight.Size = UDim2.new(0.3, 0, 1, 0)
-    flowLight.Position = UDim2.new(-0.3, 0, 0, 0)
-    flowLight.BackgroundColor3 = getAccentLight()
-    flowLight.BackgroundTransparency = 0.6
-    flowLight.BorderSizePixel = 0
-    flowLight.ZIndex = borderContainer.ZIndex + 1
-    flowLight.Parent = borderContainer
-    local flowCorner = Instance.new("UICorner", flowLight)
-    flowCorner.CornerRadius = UDim.new(0, cornerRadius + thickness)
-    local flowGradient = Instance.new("UIGradient", flowLight)
-    flowGradient.Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0, 1),
-        NumberSequenceKeypoint.new(0.3, 0.7),
-        NumberSequenceKeypoint.new(0.5, 0.3),
-        NumberSequenceKeypoint.new(0.7, 0.7),
-        NumberSequenceKeypoint.new(1, 1)
-    })
-    local flowConnection
-    local angle = 0
-    flowConnection = RunService.RenderStepped:Connect(function(dt)
-        if not borderContainer.Parent then
-            if flowConnection then flowConnection:Disconnect() end
-            return
-        end
-        angle = (angle + dt * 1.5) % (2 * math.pi)
-        local xPos = -0.3 + (math.sin(angle) + 1) / 2 * 1.6
-        flowLight.Position = UDim2.new(xPos, 0, 0, 0)
-    end)
-    table.insert(Internal.FlowConnections, flowConnection)
-    local shadow = Instance.new("ImageLabel")
-    shadow.Name = "GlowShadow"
-    shadow.Size = UDim2.new(1, thickness * 4, 1, thickness * 4)
-    shadow.Position = UDim2.new(0, -thickness * 2, 0, -thickness * 2)
-    shadow.BackgroundTransparency = 1
-    shadow.Image = "rbxassetid://13127777272"
-    shadow.ImageTransparency = 0.6 - glowIntensity * 0.3
-    shadow.ScaleType = Enum.ScaleType.Slice
-    shadow.SliceCenter = Rect.new(20, 20, 20, 20)
-    shadow.ZIndex = borderContainer.ZIndex - 1
-    shadow.Parent = borderContainer
-    return borderContainer, flowConnection
+    cornerRadius = cornerRadius or 12
+    thickness = thickness or 1
+    local s = Instance.new("UIStroke", targetFrame)
+    s.Color = getAccent()
+    s.Thickness = thickness
+    s.Transparency = 0.25
+    s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    Instance.new("UICorner", targetFrame).CornerRadius = UDim.new(0, cornerRadius)
+    return s, nil
 end
 
 local function applyGlassStyle(frame, transparency)
@@ -799,12 +743,13 @@ local function CreateDoorOverlay(parentFrame, width, height)
     logoImage.Parent = overlay
     local halfWidth = math.ceil(width / 2)
     local function openDoors(callback)
-        TweenService:Create(logoImage, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {ImageTransparency = 1, ImageColor3 = getAccent()}):Play()
-        task.wait(0.2)
-        TweenService:Create(leftDoor, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(0, -halfWidth, 0, 0)}):Play()
-        TweenService:Create(rightDoor, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(1, 0, 0, 0)}):Play()
-        task.wait(0.55)
+        TweenService:Create(logoImage, TweenInfo.new(0.2, Enum.EasingStyle.Quart), {ImageTransparency = 1}):Play()
+        task.wait(0.15)
+        TweenService:Create(leftDoor, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(0, -1, 0, 0)}):Play()
+        TweenService:Create(rightDoor, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(1, 0, 0, 0)}):Play()
+        task.wait(0.5)
         overlay.Visible = false
+        overlay:Destroy()
         if callback then callback() end
     end
     local function closeDoors(callback)
@@ -1705,7 +1650,7 @@ local function BuildCenteredUI(windowWidth, windowHeight, panelHeight, userPanel
     mainFrame.Position = UDim2.new(0.5, 0, 0, 0)
     mainFrame.AnchorPoint = Vector2.new(0.5, 0)
     mainFrame.BackgroundColor3 = getBackground()
-    mainFrame.BackgroundTransparency = 0.85
+    mainFrame.BackgroundTransparency = 0.08
     mainFrame.BorderSizePixel = 0
     mainFrame.Parent = container
     Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 12)
@@ -2651,5 +2596,7 @@ function IxaBuloHub:ClearSavedKey()
 end
 
 getgenv().IxaBuloHub = IxaBuloHub
+getgenv().BuloHub = IxaBuloHub
+getgenv().ixa = IxaBuloHub
 getgenv().Patriot = IxaBuloHub
 return IxaBuloHub
