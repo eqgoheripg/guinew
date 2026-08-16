@@ -46,24 +46,24 @@ IxaBuloHub.Options = {
 }
 
 IxaBuloHub.Theme = {
-    Accent = Color3.fromRGB(0, 120, 255),
-    AccentHover = Color3.fromRGB(30, 144, 255),
-    AccentLight = Color3.fromRGB(90, 180, 255),
-    Background = Color3.fromRGB(8, 12, 22),
-    BackgroundGlass = Color3.fromRGB(12, 18, 32),
-    Header = Color3.fromRGB(14, 22, 38),
-    Input = Color3.fromRGB(18, 28, 48),
+    Accent = Color3.fromRGB(139, 0, 0),
+    AccentHover = Color3.fromRGB(170, 20, 20),
+    AccentLight = Color3.fromRGB(200, 60, 60),
+    Background = Color3.fromRGB(8, 8, 12),
+    BackgroundGlass = Color3.fromRGB(12, 12, 18),
+    Header = Color3.fromRGB(16, 16, 22),
+    Input = Color3.fromRGB(20, 20, 28),
     Text = Color3.fromRGB(255, 255, 255),
-    TextDim = Color3.fromRGB(140, 150, 180),
+    TextDim = Color3.fromRGB(140, 140, 160),
     Success = Color3.fromRGB(50, 205, 110),
     Error = Color3.fromRGB(245, 70, 90),
     Warning = Color3.fromRGB(255, 180, 50),
-    StatusIdle = Color3.fromRGB(90, 140, 220),
+    StatusIdle = Color3.fromRGB(180, 80, 80),
     Discord = Color3.fromRGB(88, 101, 242),
     DiscordHover = Color3.fromRGB(114, 137, 218),
-    Divider = Color3.fromRGB(35, 50, 80),
+    Divider = Color3.fromRGB(45, 45, 70),
     Pending = Color3.fromRGB(60, 60, 60),
-    Glow = Color3.fromRGB(50, 130, 255)
+    Glow = Color3.fromRGB(200, 50, 50)
 }
 
 IxaBuloHub.Callbacks = {
@@ -140,7 +140,7 @@ local function safeColor3(color, default)
     if type(color) == "Color3" then
         return color
     end
-    return default or Color3.fromRGB(0, 120, 255)
+    return default or Color3.fromRGB(139, 0, 0)
 end
 
 local function getThemeColor(key, fallback)
@@ -148,35 +148,35 @@ local function getThemeColor(key, fallback)
     if type(color) == "Color3" then
         return color
     end
-    return fallback or Color3.fromRGB(0, 120, 255)
+    return fallback or Color3.fromRGB(139, 0, 0)
 end
 
 local function getAccent()
-    return getThemeColor("Accent", Color3.fromRGB(0, 120, 255))
+    return getThemeColor("Accent", Color3.fromRGB(139, 0, 0))
 end
 
 local function getAccentHover()
-    return getThemeColor("AccentHover", Color3.fromRGB(30, 144, 255))
+    return getThemeColor("AccentHover", Color3.fromRGB(170, 20, 20))
 end
 
 local function getAccentLight()
-    return getThemeColor("AccentLight", Color3.fromRGB(90, 180, 255))
+    return getThemeColor("AccentLight", Color3.fromRGB(200, 60, 60))
 end
 
 local function getBackground()
-    return getThemeColor("Background", Color3.fromRGB(8, 12, 22))
+    return getThemeColor("Background", Color3.fromRGB(8, 8, 12))
 end
 
 local function getBackgroundGlass()
-    return getThemeColor("BackgroundGlass", Color3.fromRGB(12, 18, 32))
+    return getThemeColor("BackgroundGlass", Color3.fromRGB(12, 12, 18))
 end
 
 local function getHeader()
-    return getThemeColor("Header", Color3.fromRGB(14, 22, 38))
+    return getThemeColor("Header", Color3.fromRGB(16, 16, 22))
 end
 
 local function getInput()
-    return getThemeColor("Input", Color3.fromRGB(18, 28, 48))
+    return getThemeColor("Input", Color3.fromRGB(20, 20, 28))
 end
 
 local function getText()
@@ -184,15 +184,15 @@ local function getText()
 end
 
 local function getTextDim()
-    return getThemeColor("TextDim", Color3.fromRGB(140, 150, 180))
+    return getThemeColor("TextDim", Color3.fromRGB(140, 140, 160))
 end
 
 local function getDivider()
-    return getThemeColor("Divider", Color3.fromRGB(35, 50, 80))
+    return getThemeColor("Divider", Color3.fromRGB(45, 45, 70))
 end
 
 local function getStatusIdle()
-    return getThemeColor("StatusIdle", Color3.fromRGB(90, 140, 220))
+    return getThemeColor("StatusIdle", Color3.fromRGB(180, 80, 80))
 end
 
 local function getSuccess()
@@ -216,7 +216,7 @@ local function getDiscordHover()
 end
 
 local function getGlow()
-    return getThemeColor("Glow", Color3.fromRGB(50, 130, 255))
+    return getThemeColor("Glow", Color3.fromRGB(200, 50, 50))
 end
 
 local function getPending()
@@ -408,10 +408,12 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
     borderContainer.Position = UDim2.new(0, -thickness, 0, -thickness)
     borderContainer.BackgroundTransparency = 1
     borderContainer.ZIndex = (targetFrame.ZIndex or 1) - 1
+    borderContainer.ClipsDescendants = true
+    Instance.new("UICorner", borderContainer).CornerRadius = UDim.new(0, cornerRadius + thickness)
     borderContainer.Parent = targetFrame
     local borderGradient = Instance.new("Frame")
     borderGradient.Size = UDim2.new(1, 0, 1, 0)
-    borderGradient.BackgroundTransparency = 0.85
+    borderGradient.BackgroundTransparency = 1
     borderGradient.BackgroundColor3 = getAccent()
     borderGradient.BorderSizePixel = 0
     borderGradient.ZIndex = borderContainer.ZIndex
@@ -421,7 +423,7 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
     local uiStroke = Instance.new("UIStroke", borderGradient)
     uiStroke.Color = getAccent()
     uiStroke.Thickness = thickness
-    uiStroke.Transparency = 0.3
+    uiStroke.Transparency = 1
     local flowLight = Instance.new("Frame")
     flowLight.Size = UDim2.new(0.3, 0, 1, 0)
     flowLight.Position = UDim2.new(-0.3, 0, 0, 0)
@@ -452,13 +454,20 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
         flowLight.Position = UDim2.new(xPos, 0, 0, 0)
     end)
     table.insert(Internal.FlowConnections, flowConnection)
+    task.delay(1.05, function()
+        if uiStroke and uiStroke.Parent then
+            TweenService:Create(uiStroke, TweenInfo.new(0.35), {Transparency = 0.3}):Play()
+            TweenService:Create(borderGradient, TweenInfo.new(0.35), {BackgroundTransparency = 0.85}):Play()
+            TweenService:Create(shadow, TweenInfo.new(0.35), {ImageTransparency = 0.6 - glowIntensity * 0.3}):Play()
+        end
+    end)
     local shadow = Instance.new("ImageLabel")
     shadow.Name = "GlowShadow"
     shadow.Size = UDim2.new(1, thickness * 4, 1, thickness * 4)
     shadow.Position = UDim2.new(0, -thickness * 2, 0, -thickness * 2)
     shadow.BackgroundTransparency = 1
     shadow.Image = "rbxassetid://13127777272"
-    shadow.ImageTransparency = 0.6 - glowIntensity * 0.3
+    shadow.ImageTransparency = 1
     shadow.ScaleType = Enum.ScaleType.Slice
     shadow.SliceCenter = Rect.new(20, 20, 20, 20)
     shadow.ZIndex = borderContainer.ZIndex - 1
