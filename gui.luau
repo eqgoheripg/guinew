@@ -1,26 +1,8 @@
---[[
- ________   ________   ________   _______    ___        ___  ___   ___     
-|\   __  \ |\   __  \ |\   __  \ |\  ___ \  |\  \      |\  \|\  \ |\  \    
-\ \  \|\  \\ \  \|\  \\ \  \|\  \\ \   __/| \ \  \     \ \  \\\  \\ \  \   
- \ \   __  \\ \   _  _\\ \  \\\  \\ \  \_|/__\ \  \     \ \  \\\  \\ \  \  
-  \ \  \ \  \\ \  \\  \|\ \  \\\  \\ \  \_|\ \\ \  \____ \ \  \\\  \\ \  \ 
-   \ \__\ \__\\ \__\\ _\ \ \_____  \\ \_______\\ \_______\\ \_______\\ \__\
-    \|__|\|__| \|__|\|__| \|___| \__\\|_______| \|_______| \|_______| \|__|
-                                \|__|                                      
-                                                                           
-     Github - https://github.com/SyndromeXph/expert-octo-doodle
-     Author: Cobru (Cobruhehe, .cobru)
-     Modifier: Yuxingchen
-     License: MIT
-     Enhanced UI with flowing borders, gradients, and smooth animations
-]]
-
 repeat task.wait() until game:IsLoaded()
 
 local cloneref = cloneref or function(obj) return obj end
 local gethui = gethui or function() return cloneref(game:GetService("CoreGui")) end
 
--- services
 local TweenService = cloneref(game:GetService("TweenService"))
 local UserInputService = cloneref(game:GetService("UserInputService"))
 local HttpService = cloneref(game:GetService("HttpService"))
@@ -31,76 +13,69 @@ local Players = cloneref(game:GetService("Players"))
 
 local hui = gethui()
 
-if getgenv().PatriotLoaded and hui:FindFirstChild("PatriotKeySystem") then return getgenv().Patriot end
-if getgenv().PatriotLoaded and hui:FindFirstChild("PatriotKeylessSystem") then return getgenv().Patriot end
-getgenv().PatriotLoaded = true
-getgenv().PatriotClosed = false
+if getgenv().IxaBuloHubLoaded and hui:FindFirstChild("IxaBuloHubKeySystem") then return getgenv().IxaBuloHub end
+if getgenv().IxaBuloHubLoaded and hui:FindFirstChild("IxaBuloHubKeylessSystem") then return getgenv().IxaBuloHub end
+getgenv().IxaBuloHubLoaded = true
+getgenv().IxaBuloHubClosed = false
 
-local Patriot = {}
+local IxaBuloHub = {}
 
--- appearance
-Patriot.Appearance = {
-    Title = "Patriot",
+IxaBuloHub.Appearance = {
+    Title = "Ixa & Bulo Hub",
     Subtitle = "Enter your key to continue",
     Icon = "rbxassetid://95721401302279",
     IconSize = UDim2.new(0, 30, 0, 30)
 }
 
--- links
-Patriot.Links = {
+IxaBuloHub.Links = {
     GetKey = "",
     Discord = ""
 }
 
--- storage
-Patriot.Storage = {
-    FileName = "Patriot_Key",
+IxaBuloHub.Storage = {
+    FileName = "IxaBuloHub_Key",
     Remember = true,
     AutoLoad = true
 }
 
--- options
-Patriot.Options = {
+IxaBuloHub.Options = {
     Keyless = nil,
     KeylessUI = false,
     Blur = true,
     Draggable = true
 }
 
--- theme (enhanced with gradient-friendly colors)
-Patriot.Theme = {
-    Accent = Color3.fromRGB(139, 0, 0),
-    AccentHover = Color3.fromRGB(170, 20, 20),
-    AccentLight = Color3.fromRGB(200, 60, 60),
-    Background = Color3.fromRGB(8, 8, 12),
-    BackgroundGlass = Color3.fromRGB(12, 12, 18),
-    Header = Color3.fromRGB(16, 16, 22),
-    Input = Color3.fromRGB(20, 20, 28),
+IxaBuloHub.Theme = {
+    Accent = Color3.fromRGB(0, 120, 255),
+    AccentHover = Color3.fromRGB(30, 144, 255),
+    AccentLight = Color3.fromRGB(90, 180, 255),
+    Background = Color3.fromRGB(8, 12, 22),
+    BackgroundGlass = Color3.fromRGB(12, 18, 32),
+    Header = Color3.fromRGB(14, 22, 38),
+    Input = Color3.fromRGB(18, 28, 48),
     Text = Color3.fromRGB(255, 255, 255),
-    TextDim = Color3.fromRGB(140, 140, 160),
+    TextDim = Color3.fromRGB(140, 150, 180),
     Success = Color3.fromRGB(50, 205, 110),
     Error = Color3.fromRGB(245, 70, 90),
     Warning = Color3.fromRGB(255, 180, 50),
-    StatusIdle = Color3.fromRGB(180, 80, 80),
+    StatusIdle = Color3.fromRGB(90, 140, 220),
     Discord = Color3.fromRGB(88, 101, 242),
     DiscordHover = Color3.fromRGB(114, 137, 218),
-    Divider = Color3.fromRGB(45, 45, 70),
+    Divider = Color3.fromRGB(35, 50, 80),
     Pending = Color3.fromRGB(60, 60, 60),
-    Glow = Color3.fromRGB(200, 50, 50)
+    Glow = Color3.fromRGB(50, 130, 255)
 }
 
--- callbacks
-Patriot.Callbacks = {
+IxaBuloHub.Callbacks = {
     OnVerify = nil,
     OnSuccess = nil,
     OnFail = nil,
     OnClose = nil
 }
 
-Patriot.Changelog = {}
+IxaBuloHub.Changelog = {}
 
--- shop
-Patriot.Shop = {
+IxaBuloHub.Shop = {
     Enabled = false,
     Icon = "",
     Title = "Get Premium Access",
@@ -109,7 +84,6 @@ Patriot.Shop = {
     Link = ""
 }
 
--- internal
 local Internal = {
     Junkie = nil,
     Wilkins = nil,
@@ -158,54 +132,51 @@ local FallbackIcons = {
 }
 
 local CachedIcons = {}
-local FolderName = "Patriot"
+local FolderName = "IxaBuloHub"
 local IconsFolder = "Icons"
 local DefaultLogoAsset = "rbxassetid://95721401302279"
-
--- ==================== SAFE COLOR HELPER FUNCTIONS ====================
--- These functions ensure we never pass nil to Color3 constructors
 
 local function safeColor3(color, default)
     if type(color) == "Color3" then
         return color
     end
-    return default or Color3.fromRGB(139, 0, 0)
+    return default or Color3.fromRGB(0, 120, 255)
 end
 
 local function getThemeColor(key, fallback)
-    local color = Patriot.Theme and Patriot.Theme[key]
+    local color = IxaBuloHub.Theme and IxaBuloHub.Theme[key]
     if type(color) == "Color3" then
         return color
     end
-    return fallback or Color3.fromRGB(139, 0, 0)
+    return fallback or Color3.fromRGB(0, 120, 255)
 end
 
 local function getAccent()
-    return getThemeColor("Accent", Color3.fromRGB(139, 0, 0))
+    return getThemeColor("Accent", Color3.fromRGB(0, 120, 255))
 end
 
 local function getAccentHover()
-    return getThemeColor("AccentHover", Color3.fromRGB(170, 20, 20))
+    return getThemeColor("AccentHover", Color3.fromRGB(30, 144, 255))
 end
 
 local function getAccentLight()
-    return getThemeColor("AccentLight", Color3.fromRGB(200, 60, 60))
+    return getThemeColor("AccentLight", Color3.fromRGB(90, 180, 255))
 end
 
 local function getBackground()
-    return getThemeColor("Background", Color3.fromRGB(8, 8, 12))
+    return getThemeColor("Background", Color3.fromRGB(8, 12, 22))
 end
 
 local function getBackgroundGlass()
-    return getThemeColor("BackgroundGlass", Color3.fromRGB(12, 12, 18))
+    return getThemeColor("BackgroundGlass", Color3.fromRGB(12, 18, 32))
 end
 
 local function getHeader()
-    return getThemeColor("Header", Color3.fromRGB(16, 16, 22))
+    return getThemeColor("Header", Color3.fromRGB(14, 22, 38))
 end
 
 local function getInput()
-    return getThemeColor("Input", Color3.fromRGB(20, 20, 28))
+    return getThemeColor("Input", Color3.fromRGB(18, 28, 48))
 end
 
 local function getText()
@@ -213,15 +184,15 @@ local function getText()
 end
 
 local function getTextDim()
-    return getThemeColor("TextDim", Color3.fromRGB(140, 140, 160))
+    return getThemeColor("TextDim", Color3.fromRGB(140, 150, 180))
 end
 
 local function getDivider()
-    return getThemeColor("Divider", Color3.fromRGB(45, 45, 70))
+    return getThemeColor("Divider", Color3.fromRGB(35, 50, 80))
 end
 
 local function getStatusIdle()
-    return getThemeColor("StatusIdle", Color3.fromRGB(180, 80, 80))
+    return getThemeColor("StatusIdle", Color3.fromRGB(90, 140, 220))
 end
 
 local function getSuccess()
@@ -245,14 +216,12 @@ local function getDiscordHover()
 end
 
 local function getGlow()
-    return getThemeColor("Glow", Color3.fromRGB(200, 50, 50))
+    return getThemeColor("Glow", Color3.fromRGB(50, 130, 255))
 end
 
 local function getPending()
     return getThemeColor("Pending", Color3.fromRGB(60, 60, 60))
 end
-
--- ==================== END SAFE COLOR HELPERS ====================
 
 local function isMobile()
     return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
@@ -275,11 +244,11 @@ end
 local fileSystemSupported = hasFileSystem()
 
 local function getFileName()
-    return FolderName .. "/" .. Patriot.Storage.FileName .. ".txt"
+    return FolderName .. "/" .. IxaBuloHub.Storage.FileName .. ".txt"
 end
 
 local function saveKey(key)
-    if not fileSystemSupported or not Patriot.Storage.Remember then return false end
+    if not fileSystemSupported or not IxaBuloHub.Storage.Remember then return false end
     return pcall(function() writefile(getFileName(), key) end)
 end
 
@@ -342,21 +311,21 @@ local function getIcon(iconName)
 end
 
 local function getLogoIcon()
-    if Patriot.Appearance.Icon == DefaultLogoAsset then return getIcon("logo") end
-    return Patriot.Appearance.Icon
+    if IxaBuloHub.Appearance.Icon == DefaultLogoAsset then return getIcon("logo") end
+    return IxaBuloHub.Appearance.Icon
 end
 
 local function shouldDownloadLogo()
-    return Patriot.Appearance.Icon == DefaultLogoAsset
+    return IxaBuloHub.Appearance.Icon == DefaultLogoAsset
 end
 
 local function getShopIcon()
-    if Patriot.Shop.Icon == "" then return getLogoIcon() end
-    return Patriot.Shop.Icon
+    if IxaBuloHub.Shop.Icon == "" then return getLogoIcon() end
+    return IxaBuloHub.Shop.Icon
 end
 
 local function isShopEnabled()
-    return Patriot.Shop.Enabled
+    return IxaBuloHub.Shop.Enabled
 end
 
 local function allIconsCached()
@@ -429,14 +398,10 @@ local function formatDate()
     return os.date("%b %d, %Y")
 end
 
--- ==================== ENHANCED UI FUNCTIONS ====================
-
--- Create a flowing border effect around a frame
 local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowIntensity)
     cornerRadius = cornerRadius or 4
     thickness = thickness or 2
     glowIntensity = glowIntensity or 0.5
-    
     local borderContainer = Instance.new("Frame")
     borderContainer.Name = "FlowingBorder"
     borderContainer.Size = UDim2.new(1, thickness * 2, 1, thickness * 2)
@@ -444,7 +409,6 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
     borderContainer.BackgroundTransparency = 1
     borderContainer.ZIndex = (targetFrame.ZIndex or 1) - 1
     borderContainer.Parent = targetFrame
-    
     local borderGradient = Instance.new("Frame")
     borderGradient.Size = UDim2.new(1, 0, 1, 0)
     borderGradient.BackgroundTransparency = 0.85
@@ -452,16 +416,12 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
     borderGradient.BorderSizePixel = 0
     borderGradient.ZIndex = borderContainer.ZIndex
     borderGradient.Parent = borderContainer
-    
     local uiCorner = Instance.new("UICorner", borderGradient)
     uiCorner.CornerRadius = UDim.new(0, cornerRadius + thickness)
-    
     local uiStroke = Instance.new("UIStroke", borderGradient)
     uiStroke.Color = getAccent()
     uiStroke.Thickness = thickness
     uiStroke.Transparency = 0.3
-    
-    -- Create flowing light effect
     local flowLight = Instance.new("Frame")
     flowLight.Size = UDim2.new(0.3, 0, 1, 0)
     flowLight.Position = UDim2.new(-0.3, 0, 0, 0)
@@ -470,10 +430,8 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
     flowLight.BorderSizePixel = 0
     flowLight.ZIndex = borderContainer.ZIndex + 1
     flowLight.Parent = borderContainer
-    
     local flowCorner = Instance.new("UICorner", flowLight)
     flowCorner.CornerRadius = UDim.new(0, cornerRadius + thickness)
-    
     local flowGradient = Instance.new("UIGradient", flowLight)
     flowGradient.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 1),
@@ -482,8 +440,6 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
         NumberSequenceKeypoint.new(0.7, 0.7),
         NumberSequenceKeypoint.new(1, 1)
     })
-    
-    -- Animate the flowing light
     local flowConnection
     local angle = 0
     flowConnection = RunService.RenderStepped:Connect(function(dt)
@@ -495,31 +451,25 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
         local xPos = -0.3 + (math.sin(angle) + 1) / 2 * 1.6
         flowLight.Position = UDim2.new(xPos, 0, 0, 0)
     end)
-    
     table.insert(Internal.FlowConnections, flowConnection)
-    
-    -- Add subtle glow shadow
     local shadow = Instance.new("ImageLabel")
     shadow.Name = "GlowShadow"
     shadow.Size = UDim2.new(1, thickness * 4, 1, thickness * 4)
     shadow.Position = UDim2.new(0, -thickness * 2, 0, -thickness * 2)
     shadow.BackgroundTransparency = 1
-    shadow.Image = "rbxassetid://13127777272" -- Soft glow texture
+    shadow.Image = "rbxassetid://13127777272"
     shadow.ImageTransparency = 0.6 - glowIntensity * 0.3
     shadow.ScaleType = Enum.ScaleType.Slice
     shadow.SliceCenter = Rect.new(20, 20, 20, 20)
     shadow.ZIndex = borderContainer.ZIndex - 1
     shadow.Parent = borderContainer
-    
     return borderContainer, flowConnection
 end
 
--- Apply advanced glass morphism style to a frame
 local function applyGlassStyle(frame, transparency)
     transparency = transparency or 0.85
     frame.BackgroundTransparency = transparency
     local gradient = Instance.new("UIGradient", frame)
-    -- Use safe transparency values, no Color3 needed here
     gradient.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0.1),
         NumberSequenceKeypoint.new(0.5, 0),
@@ -529,12 +479,10 @@ local function applyGlassStyle(frame, transparency)
     return gradient
 end
 
--- Enhanced button with hover effects
 local function createEnhancedButton(text, iconKey, isPrimary, parent, yPos, widthScale)
     widthScale = widthScale or 0.75
     local mobile = isMobile()
     local buttonHeight = mobile and math.clamp(42 * getScale(), 38, 48) or 42
-    
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(widthScale, 0, 0, buttonHeight)
     btn.Position = UDim2.new(0.5, 0, 0, yPos)
@@ -546,8 +494,6 @@ local function createEnhancedButton(text, iconKey, isPrimary, parent, yPos, widt
     btn.AutoButtonColor = false
     btn.Parent = parent
     Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
-    
-    -- Gradient background for primary buttons - using safe colors
     if isPrimary then
         local btnGradient = Instance.new("UIGradient", btn)
         local accent = getAccent()
@@ -559,23 +505,19 @@ local function createEnhancedButton(text, iconKey, isPrimary, parent, yPos, widt
         })
         btnGradient.Rotation = 90
     end
-    
     local btnStroke = Instance.new("UIStroke", btn)
     btnStroke.Color = isPrimary and getAccentLight() or getAccent()
     btnStroke.Thickness = 1
     btnStroke.Transparency = isPrimary and 0.3 or 0.6
-    
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, 0, 1, 0)
     content.BackgroundTransparency = 1
     content.Parent = btn
-    
     local layout = Instance.new("UIListLayout", content)
     layout.FillDirection = Enum.FillDirection.Horizontal
     layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     layout.VerticalAlignment = Enum.VerticalAlignment.Center
     layout.Padding = UDim.new(0, 8)
-    
     local iconImg = Instance.new("ImageLabel")
     iconImg.Size = UDim2.new(0, 18, 0, 18)
     iconImg.BackgroundTransparency = 1
@@ -584,7 +526,6 @@ local function createEnhancedButton(text, iconKey, isPrimary, parent, yPos, widt
     iconImg.ScaleType = Enum.ScaleType.Fit
     iconImg.LayoutOrder = 1
     iconImg.Parent = content
-    
     local label = Instance.new("TextLabel")
     label.Size = UDim2.new(0, 0, 0, 20)
     label.AutomaticSize = Enum.AutomaticSize.X
@@ -595,8 +536,6 @@ local function createEnhancedButton(text, iconKey, isPrimary, parent, yPos, widt
     label.Font = Enum.Font.ArimoBold
     label.LayoutOrder = 2
     label.Parent = content
-    
-    -- Hover animations
     btn.MouseEnter:Connect(function()
         TweenService:Create(btn, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundTransparency = isPrimary and 0 or 0.7}):Play()
         TweenService:Create(btnStroke, TweenInfo.new(0.15), {Transparency = 0.2}):Play()
@@ -609,16 +548,13 @@ local function createEnhancedButton(text, iconKey, isPrimary, parent, yPos, widt
         TweenService:Create(btn, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Size = UDim2.new(widthScale, 0, 0, buttonHeight)}):Play()
         TweenService:Create(iconImg, TweenInfo.new(0.15), {ImageColor3 = getText()}):Play()
     end)
-    
     return btn
 end
 
--- Enhanced input field with glow effect
 local function createEnhancedInput(parent, yPos, widthScale, placeholder)
     local mobile = isMobile()
     local elementHeight = mobile and math.clamp(56 * getScale(), 48, 62) or 56
     widthScale = widthScale or 0.94
-    
     local inputFrame = Instance.new("Frame")
     inputFrame.Size = UDim2.new(widthScale, 0, 0, elementHeight)
     inputFrame.Position = UDim2.new(0.5, 0, 0, yPos)
@@ -629,24 +565,20 @@ local function createEnhancedInput(parent, yPos, widthScale, placeholder)
     inputFrame.ClipsDescendants = true
     inputFrame.Parent = parent
     Instance.new("UICorner", inputFrame).CornerRadius = UDim.new(0, 8)
-    
     local inputStroke = Instance.new("UIStroke", inputFrame)
     inputStroke.Color = getAccent()
     inputStroke.Thickness = 1
     inputStroke.Transparency = 0.6
-    
     local glowFrame = Instance.new("Frame")
     glowFrame.Size = UDim2.new(1, 0, 1, 0)
     glowFrame.BackgroundTransparency = 1
     glowFrame.Parent = inputFrame
-    
     local glowGradient = Instance.new("UIGradient", glowFrame)
     glowGradient.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 1),
         NumberSequenceKeypoint.new(0.5, 0.9),
         NumberSequenceKeypoint.new(1, 1)
     })
-    
     local textBox = Instance.new("TextBox")
     textBox.Size = UDim2.new(1, -24, 1, 0)
     textBox.Position = UDim2.new(0, 12, 0.5, 0)
@@ -662,8 +594,6 @@ local function createEnhancedInput(parent, yPos, widthScale, placeholder)
     textBox.TextTruncate = Enum.TextTruncate.AtEnd
     textBox.TextXAlignment = Enum.TextXAlignment.Left
     textBox.Parent = inputFrame
-    
-    -- Focus glow animation
     textBox.Focused:Connect(function()
         TweenService:Create(inputStroke, TweenInfo.new(0.2), {Transparency = 0.2, Thickness = 2}):Play()
         TweenService:Create(glowGradient, TweenInfo.new(0.2), {Transparency = NumberSequence.new({
@@ -680,15 +610,12 @@ local function createEnhancedInput(parent, yPos, widthScale, placeholder)
             NumberSequenceKeypoint.new(1, 1)
         })}):Play()
     end)
-    
     return textBox, inputFrame
 end
 
--- Enhanced status frame
 local function createEnhancedStatusFrame(parent, yPos, statusText, iconKey)
     local mobile = isMobile()
     local statusHeight = mobile and math.clamp(60 * getScale(), 52, 68) or 60
-    
     local statusFrame = Instance.new("Frame")
     statusFrame.Size = UDim2.new(0.94, 0, 0, statusHeight)
     statusFrame.Position = UDim2.new(0.5, 0, 0, yPos)
@@ -699,12 +626,10 @@ local function createEnhancedStatusFrame(parent, yPos, statusText, iconKey)
     statusFrame.ClipsDescendants = true
     statusFrame.Parent = parent
     Instance.new("UICorner", statusFrame).CornerRadius = UDim.new(0, 8)
-    
     local statusStroke = Instance.new("UIStroke", statusFrame)
     statusStroke.Color = getAccent()
     statusStroke.Thickness = 1
     statusStroke.Transparency = 0.5
-    
     local statusIcon = Instance.new("ImageLabel")
     statusIcon.Size = UDim2.new(0, 24, 0, 24)
     statusIcon.Position = UDim2.new(0, 16, 0.5, 0)
@@ -714,19 +639,17 @@ local function createEnhancedStatusFrame(parent, yPos, statusText, iconKey)
     statusIcon.ImageColor3 = getStatusIdle()
     statusIcon.ScaleType = Enum.ScaleType.Fit
     statusIcon.Parent = statusFrame
-    
     local statusLabel = Instance.new("TextLabel")
     statusLabel.Size = UDim2.new(1, -60, 1, 0)
     statusLabel.Position = UDim2.new(0, 52, 0, 0)
     statusLabel.BackgroundTransparency = 1
-    statusLabel.Text = statusText or Patriot.Appearance.Subtitle
+    statusLabel.Text = statusText or IxaBuloHub.Appearance.Subtitle
     statusLabel.TextColor3 = getStatusIdle()
     statusLabel.TextSize = mobile and 17 or 18
     statusLabel.Font = Enum.Font.ArimoBold
     statusLabel.TextXAlignment = Enum.TextXAlignment.Left
     statusLabel.TextTruncate = Enum.TextTruncate.AtEnd
     statusLabel.Parent = statusFrame
-    
     local pulseConnection
     local function startPulse()
         pulseConnection = RunService.RenderStepped:Connect(function(dt)
@@ -736,18 +659,15 @@ local function createEnhancedStatusFrame(parent, yPos, statusText, iconKey)
         end)
         return pulseConnection
     end
-    
     return statusFrame, statusIcon, statusLabel, startPulse
 end
 
--- ==================== END ENHANCED UI FUNCTIONS ====================
-
 local function enableBlur()
-    if not Patriot.Options.Blur then return end
-    local existing = Lighting:FindFirstChild("PatriotKeySystemBlur")
+    if not IxaBuloHub.Options.Blur then return end
+    local existing = Lighting:FindFirstChild("IxaBuloHubBlur")
     if existing then existing:Destroy() end
     Internal.BlurEffect = Instance.new("BlurEffect")
-    Internal.BlurEffect.Name = "PatriotKeySystemBlur"
+    Internal.BlurEffect.Name = "IxaBuloHubBlur"
     Internal.BlurEffect.Size = 0
     Internal.BlurEffect.Parent = Lighting
     TweenService:Create(Internal.BlurEffect, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Size = 24}):Play()
@@ -763,30 +683,30 @@ local function disableBlur()
             end
         end)
     else
-        local existing = Lighting:FindFirstChild("PatriotKeySystemBlur")
+        local existing = Lighting:FindFirstChild("IxaBuloHubBlur")
         if existing then existing:Destroy() end
         Internal.BlurEffect = nil
     end
 end
 
 local function fullCleanup()
-    getgenv().PatriotLoaded = false
-    getgenv().PatriotClosed = true
+    getgenv().IxaBuloHubLoaded = false
+    getgenv().IxaBuloHubClosed = true
     for _, conn in ipairs(Internal.FlowConnections) do
         pcall(function() conn:Disconnect() end)
     end
     Internal.FlowConnections = {}
     disableBlur()
-    local gui1 = hui:FindFirstChild("PatriotKeySystem")
-    local gui2 = hui:FindFirstChild("PatriotKeylessSystem")
-    local gui3 = hui:FindFirstChild("PatriotLoadingScreen")
+    local gui1 = hui:FindFirstChild("IxaBuloHubKeySystem")
+    local gui2 = hui:FindFirstChild("IxaBuloHubKeylessSystem")
+    local gui3 = hui:FindFirstChild("IxaBuloHubLoadingScreen")
     if gui1 then gui1:Destroy() end
     if gui2 then gui2:Destroy() end
     if gui3 then gui3:Destroy() end
 end
 
 local function setupDragging(header, main)
-    if not Patriot.Options.Draggable then return end
+    if not IxaBuloHub.Options.Draggable then return end
     local dragging, dragStart, startPos, dragInput
     header.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -832,7 +752,6 @@ local function runExternalScript()
     end)
 end
 
--- Enhanced Door Overlay
 local function CreateDoorOverlay(parentFrame, width, height)
     local overlay = Instance.new("Frame")
     overlay.Name = "DoorOverlay"
@@ -841,7 +760,6 @@ local function CreateDoorOverlay(parentFrame, width, height)
     overlay.ClipsDescendants = true
     overlay.ZIndex = 50
     overlay.Parent = parentFrame
-
     local leftDoor = Instance.new("Frame")
     leftDoor.Name = "LeftDoor"
     leftDoor.Size = UDim2.new(0.5, 0, 1, 0)
@@ -850,7 +768,6 @@ local function CreateDoorOverlay(parentFrame, width, height)
     leftDoor.BorderSizePixel = 0
     leftDoor.ZIndex = 51
     leftDoor.Parent = overlay
-
     local rightDoor = Instance.new("Frame")
     rightDoor.Name = "RightDoor"
     rightDoor.Size = UDim2.new(0.5, 0, 1, 0)
@@ -859,8 +776,6 @@ local function CreateDoorOverlay(parentFrame, width, height)
     rightDoor.BorderSizePixel = 0
     rightDoor.ZIndex = 51
     rightDoor.Parent = overlay
-
-    -- Add gradient to doors
     for _, door in ipairs({leftDoor, rightDoor}) do
         local gradient = Instance.new("UIGradient", door)
         gradient.Transparency = NumberSequence.new({
@@ -870,7 +785,6 @@ local function CreateDoorOverlay(parentFrame, width, height)
         })
         gradient.Rotation = 90
     end
-
     local logoSize = math.min(width, height) * 0.28
     local logoImage = Instance.new("ImageLabel")
     logoImage.Name = "DoorLogo"
@@ -883,9 +797,7 @@ local function CreateDoorOverlay(parentFrame, width, height)
     logoImage.ScaleType = Enum.ScaleType.Fit
     logoImage.ZIndex = 54
     logoImage.Parent = overlay
-
     local halfWidth = math.ceil(width / 2)
-
     local function openDoors(callback)
         TweenService:Create(logoImage, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {ImageTransparency = 1, ImageColor3 = getAccent()}):Play()
         task.wait(0.2)
@@ -895,7 +807,6 @@ local function CreateDoorOverlay(parentFrame, width, height)
         overlay.Visible = false
         if callback then callback() end
     end
-
     local function closeDoors(callback)
         overlay.Visible = true
         leftDoor.Position = UDim2.new(0, -halfWidth, 0, 0)
@@ -908,44 +819,36 @@ local function CreateDoorOverlay(parentFrame, width, height)
         task.wait(0.35)
         if callback then callback() end
     end
-
     return {overlay = overlay, open = openDoors, close = closeDoors}
 end
 
--- Loading Screen
 local function ShowLoadingScreen(onComplete)
     local completed = false
-    local oldGui = hui:FindFirstChild("PatriotLoadingScreen")
+    local oldGui = hui:FindFirstChild("IxaBuloHubLoadingScreen")
     if oldGui then oldGui:Destroy() end
-    local oldBlur = Lighting:FindFirstChild("PatriotLoadingBlur")
+    local oldBlur = Lighting:FindFirstChild("IxaBuloHubLoadingBlur")
     if oldBlur then oldBlur:Destroy() end
-
     local blurEffect = Instance.new("BlurEffect")
-    blurEffect.Name = "PatriotLoadingBlur"
+    blurEffect.Name = "IxaBuloHubLoadingBlur"
     blurEffect.Size = 0
     blurEffect.Parent = Lighting
-
     local gui = Instance.new("ScreenGui")
-    gui.Name = "PatriotLoadingScreen"
+    gui.Name = "IxaBuloHubLoadingScreen"
     gui.ResetOnSpawn = false
     gui.IgnoreGuiInset = true
     gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     gui.Parent = hui
-
     local mobile = isMobile()
-
     local loadingScreen = Instance.new("Frame")
     loadingScreen.Size = UDim2.new(1, 0, 1, 0)
     loadingScreen.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     loadingScreen.BackgroundTransparency = 1
     loadingScreen.BorderSizePixel = 0
     loadingScreen.Parent = gui
-
     local linesContainer = Instance.new("Frame")
     linesContainer.Size = UDim2.new(1, 0, 1, 0)
     linesContainer.BackgroundTransparency = 1
     linesContainer.Parent = loadingScreen
-
     local longLines = {}
     local linePositions = {0.15, 0.35, 0.65, 0.85}
     for i = 1, 4 do
@@ -959,7 +862,6 @@ local function ShowLoadingScreen(onComplete)
         Instance.new("UICorner", line).CornerRadius = UDim.new(1, 0)
         longLines[i] = line
     end
-
     local shipSize = mobile and 18 or 28
     local shipContainer = Instance.new("Frame")
     shipContainer.Size = UDim2.new(0, mobile and 100 or 150, 0, mobile and 30 or 50)
@@ -967,7 +869,6 @@ local function ShowLoadingScreen(onComplete)
     shipContainer.AnchorPoint = Vector2.new(0.5, 0.5)
     shipContainer.BackgroundTransparency = 1
     shipContainer.Parent = loadingScreen
-
     local shipBody = Instance.new("Frame")
     shipBody.Size = UDim2.new(0, shipSize, 0, shipSize)
     shipBody.Position = UDim2.new(0.5, 10, 0.5, 0)
@@ -977,7 +878,6 @@ local function ShowLoadingScreen(onComplete)
     shipBody.BorderSizePixel = 0
     shipBody.Parent = shipContainer
     Instance.new("UICorner", shipBody).CornerRadius = UDim.new(1, 0)
-
     local pointSize = mobile and 10 or 16
     local shipPoint = Instance.new("Frame")
     shipPoint.Size = UDim2.new(0, pointSize, 0, pointSize)
@@ -989,7 +889,6 @@ local function ShowLoadingScreen(onComplete)
     shipPoint.Rotation = 45
     shipPoint.Parent = shipBody
     Instance.new("UICorner", shipPoint).CornerRadius = UDim.new(0, 3)
-
     local trails = {}
     local trailConfigs = {
         {y = 0.20, width = mobile and 45 or 70},
@@ -1011,31 +910,26 @@ local function ShowLoadingScreen(onComplete)
         Instance.new("UICorner", trail).CornerRadius = UDim.new(1, 0)
         trails[i] = {frame = trail, config = config}
     end
-
     local phasesContainer = Instance.new("Frame")
     phasesContainer.Size = UDim2.new(0, mobile and 200 or 280, 0, mobile and 150 or 180)
     phasesContainer.Position = UDim2.new(0.5, 0, 0.62, 0)
     phasesContainer.AnchorPoint = Vector2.new(0.5, 0.5)
     phasesContainer.BackgroundTransparency = 1
     phasesContainer.Parent = loadingScreen
-
     local phasesLayout = Instance.new("UIListLayout", phasesContainer)
     phasesLayout.Padding = UDim.new(0, mobile and 8 or 12)
     phasesLayout.SortOrder = Enum.SortOrder.LayoutOrder
     phasesLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     phasesLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-
     local phases = {}
     local phaseNames = {"Initializing", "Creating folders", "Downloading assets", "Preparing interface", "Ready"}
     local phaseTextSize = mobile and 14 or 18
-
     for i, name in ipairs(phaseNames) do
         local row = Instance.new("Frame")
         row.Size = UDim2.new(1, 0, 0, mobile and 22 or 28)
         row.BackgroundTransparency = 1
         row.LayoutOrder = i
         row.Parent = phasesContainer
-
         local indicator = Instance.new("TextLabel")
         indicator.Size = UDim2.new(0, mobile and 22 or 28, 0, mobile and 22 or 28)
         indicator.BackgroundTransparency = 1
@@ -1045,7 +939,6 @@ local function ShowLoadingScreen(onComplete)
         indicator.Font = Enum.Font.ArimoBold
         indicator.TextTransparency = 1
         indicator.Parent = row
-
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(1, mobile and -28 or -35, 1, 0)
         label.Position = UDim2.new(0, mobile and 28 or 35, 0, 0)
@@ -1057,14 +950,11 @@ local function ShowLoadingScreen(onComplete)
         label.TextXAlignment = Enum.TextXAlignment.Left
         label.TextTransparency = 1
         label.Parent = row
-
         phases[i] = {indicator = indicator, label = label}
     end
-
     local animationRunning = true
     local currentPhase = 0
     local pulseThread = nil
-
     local function animateLongLines()
         local speeds = {0.8, 1.0, 0.7, 0.9}
         while animationRunning do
@@ -1078,7 +968,6 @@ local function ShowLoadingScreen(onComplete)
             task.wait(0.5)
         end
     end
-
     local function animateTrails()
         while animationRunning do
             for _, trail in ipairs(trails) do
@@ -1088,7 +977,6 @@ local function ShowLoadingScreen(onComplete)
             task.wait(0.1)
         end
     end
-
     local function animateShipShake()
         while animationRunning do
             local shakeAmount = mobile and 2 or 3
@@ -1096,7 +984,6 @@ local function ShowLoadingScreen(onComplete)
             task.wait(0.04)
         end
     end
-
     local function setPhase(num)
         if pulseThread then task.cancel(pulseThread) pulseThread = nil end
         for i = 1, 5 do
@@ -1127,7 +1014,6 @@ local function ShowLoadingScreen(onComplete)
             end
         end
     end
-
     task.spawn(function()
         TweenService:Create(blurEffect, TweenInfo.new(0.6), {Size = 24}):Play()
         TweenService:Create(loadingScreen, TweenInfo.new(0.5), {BackgroundTransparency = 0.25}):Play()
@@ -1174,7 +1060,6 @@ local function ShowLoadingScreen(onComplete)
         if onComplete then onComplete() end
         completed = true
     end)
-
     while not completed do task.wait(0.05) end
 end
 
@@ -1188,19 +1073,16 @@ local function EnsureIconsReady(callback)
     end
 end
 
--- Notification System
-function Patriot:Notify(title, message, duration, iconType)
+function IxaBuloHub:Notify(title, message, duration, iconType)
     duration = duration or 5
     iconType = iconType or "info"
     local scale = getScale()
     local width = math.clamp(320 * scale, 260, 380)
     local height = math.clamp(80 * scale, 75, 105)
-
     local notifGui = Instance.new("ScreenGui")
     notifGui.ResetOnSpawn = false
     notifGui.DisplayOrder = 999999
     notifGui.Parent = hui
-
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, width, 0, height)
     frame.Position = UDim2.new(1, width + 20, 1, -15)
@@ -1210,32 +1092,27 @@ function Patriot:Notify(title, message, duration, iconType)
     frame.BorderSizePixel = 0
     frame.Parent = notifGui
     Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 6)
-
     local notifGradient = Instance.new("UIGradient", frame)
     notifGradient.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0.1),
         NumberSequenceKeypoint.new(0.5, 0),
         NumberSequenceKeypoint.new(1, 0.1)
     })
-
     local stroke = Instance.new("UIStroke", frame)
     stroke.Color = getAccent()
     stroke.Thickness = 1
     stroke.Transparency = 0.5
-
     local progressBg = Instance.new("Frame")
     progressBg.Size = UDim2.new(1, 0, 0, 2)
     progressBg.Position = UDim2.new(0, 0, 1, -2)
     progressBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     progressBg.BorderSizePixel = 0
     progressBg.Parent = frame
-
     local progressBar = Instance.new("Frame")
     progressBar.Size = UDim2.new(1, 0, 1, 0)
     progressBar.BackgroundColor3 = getAccent()
     progressBar.BorderSizePixel = 0
     progressBar.Parent = progressBg
-
     local iconSize = height - 35
     local icon = Instance.new("ImageLabel")
     icon.Size = UDim2.new(0, iconSize, 0, iconSize)
@@ -1244,7 +1121,6 @@ function Patriot:Notify(title, message, duration, iconType)
     icon.BackgroundTransparency = 1
     icon.ScaleType = Enum.ScaleType.Fit
     icon.Parent = frame
-
     local iconMap = {
         success = {"check", getSuccess()}, error = {"alert", getError()},
         warning = {"alert", getWarning()}, shield = {"shield", getAccent()},
@@ -1252,7 +1128,6 @@ function Patriot:Notify(title, message, duration, iconType)
         copy = {"copy", getSuccess()}, discord = {"discord", getDiscord()},
         close = {"close", getError()}
     }
-
     if iconMap[iconType] then
         icon.Image = getIcon(iconMap[iconType][1])
         icon.ImageColor3 = iconMap[iconType][2]
@@ -1260,7 +1135,6 @@ function Patriot:Notify(title, message, duration, iconType)
         icon.Image = getLogoIcon()
         icon.ImageColor3 = getText()
     end
-
     local textX = 14 + iconSize + 14
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Size = UDim2.new(1, -(textX + 14), 0, 24)
@@ -1273,7 +1147,6 @@ function Patriot:Notify(title, message, duration, iconType)
     titleLabel.Text = title
     titleLabel.TextTruncate = Enum.TextTruncate.AtEnd
     titleLabel.Parent = frame
-
     local messageLabel = Instance.new("TextLabel")
     messageLabel.Size = UDim2.new(1, -(textX + 14), 0, 22)
     messageLabel.Position = UDim2.new(0, textX, 0, 38)
@@ -1285,10 +1158,8 @@ function Patriot:Notify(title, message, duration, iconType)
     messageLabel.Text = message
     messageLabel.TextTruncate = Enum.TextTruncate.AtEnd
     messageLabel.Parent = frame
-
     local id = tick() .. HttpService:GenerateGUID(false)
     table.insert(Internal.NotificationList, {id = id, frame = frame, gui = notifGui, height = height})
-
     local function restack()
         local yOffset = 0
         for i = #Internal.NotificationList, 1, -1 do
@@ -1299,11 +1170,9 @@ function Patriot:Notify(title, message, duration, iconType)
             end
         end
     end
-
     TweenService:Create(frame, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {Position = UDim2.new(1, -15, 1, -15)}):Play()
     task.wait(0.1)
     restack()
-
     local function dismiss()
         for i, n in ipairs(Internal.NotificationList) do
             if n.id == id then table.remove(Internal.NotificationList, i) break end
@@ -1313,10 +1182,8 @@ function Patriot:Notify(title, message, duration, iconType)
         notifGui:Destroy()
         restack()
     end
-
     TweenService:Create(progressBar, TweenInfo.new(duration, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 1, 0)}):Play()
     task.delay(duration, dismiss)
-
     local clickBtn = Instance.new("TextButton")
     clickBtn.Size = UDim2.new(1, 0, 1, 0)
     clickBtn.BackgroundTransparency = 1
@@ -1325,11 +1192,9 @@ function Patriot:Notify(title, message, duration, iconType)
     clickBtn.MouseButton1Click:Connect(dismiss)
 end
 
--- Enhanced Changelog Panel
 local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth, mainFrame, gap)
     panelWidth = panelWidth or 220
     local isOpen = false
-
     local panel = Instance.new("Frame")
     panel.Name = "ChangelogPanel"
     panel.Size = UDim2.new(0, 0, 0, panelHeight)
@@ -1340,7 +1205,6 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
     panel.ClipsDescendants = true
     panel.Parent = mainFrame
     Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 8)
-
     local panelGradient = Instance.new("UIGradient", panel)
     panelGradient.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0.1),
@@ -1348,12 +1212,10 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
         NumberSequenceKeypoint.new(1, 0.1)
     })
     panelGradient.Rotation = 45
-
     local panelStroke = Instance.new("UIStroke", panel)
     panelStroke.Color = getAccent()
     panelStroke.Thickness = 1
     panelStroke.Transparency = 1
-
     local panelHeader = Instance.new("Frame")
     panelHeader.Size = UDim2.new(1, 0, 0, 50)
     panelHeader.BackgroundColor3 = getHeader()
@@ -1361,7 +1223,6 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
     panelHeader.BorderSizePixel = 0
     panelHeader.Parent = panel
     Instance.new("UICorner", panelHeader).CornerRadius = UDim.new(0, 8)
-
     local panelHeaderFix = Instance.new("Frame")
     panelHeaderFix.Size = UDim2.new(1, 0, 0, 8)
     panelHeaderFix.Position = UDim2.new(0, 0, 1, -8)
@@ -1369,7 +1230,6 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
     panelHeaderFix.BackgroundTransparency = 0.85
     panelHeaderFix.BorderSizePixel = 0
     panelHeaderFix.Parent = panelHeader
-
     local panelHeaderLine = Instance.new("Frame")
     panelHeaderLine.Size = UDim2.new(1, 0, 0, 1)
     panelHeaderLine.Position = UDim2.new(0, 0, 1, 0)
@@ -1377,7 +1237,6 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
     panelHeaderLine.BackgroundTransparency = 0.4
     panelHeaderLine.BorderSizePixel = 0
     panelHeaderLine.Parent = panelHeader
-
     local panelHeaderIcon = Instance.new("ImageLabel")
     panelHeaderIcon.Size = UDim2.new(0, 16, 0, 16)
     panelHeaderIcon.Position = UDim2.new(0, 12, 0.5, 0)
@@ -1387,7 +1246,6 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
     panelHeaderIcon.ImageColor3 = getAccent()
     panelHeaderIcon.ScaleType = Enum.ScaleType.Fit
     panelHeaderIcon.Parent = panelHeader
-
     local panelTitle = Instance.new("TextLabel")
     panelTitle.Size = UDim2.new(1, -65, 1, 0)
     panelTitle.Position = UDim2.new(0, 34, 0, 0)
@@ -1398,7 +1256,6 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
     panelTitle.Font = Enum.Font.ArimoBold
     panelTitle.TextXAlignment = Enum.TextXAlignment.Left
     panelTitle.Parent = panelHeader
-
     local panelClose = Instance.new("ImageButton")
     panelClose.Size = UDim2.new(0, 20, 0, 20)
     panelClose.Position = UDim2.new(1, -14, 0.5, 0)
@@ -1410,7 +1267,6 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
     panelClose.Parent = panelHeader
     panelClose.MouseEnter:Connect(function() TweenService:Create(panelClose, TweenInfo.new(0.15), {ImageColor3 = getError()}):Play() end)
     panelClose.MouseLeave:Connect(function() TweenService:Create(panelClose, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-
     local scrollFrame = Instance.new("ScrollingFrame")
     scrollFrame.Size = UDim2.new(1, 0, 1, -55)
     scrollFrame.Position = UDim2.new(0, 0, 0, 55)
@@ -1421,28 +1277,23 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
     scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
     scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
     scrollFrame.Parent = panel
-
     local scrollPadding = Instance.new("UIPadding", scrollFrame)
     scrollPadding.PaddingLeft = UDim.new(0, 10)
     scrollPadding.PaddingRight = UDim.new(0, 10)
     scrollPadding.PaddingTop = UDim.new(0, 5)
     scrollPadding.PaddingBottom = UDim.new(0, 5)
-
     local contentLayout = Instance.new("UIListLayout", scrollFrame)
     contentLayout.Padding = UDim.new(0, 10)
     contentLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-    for i, update in ipairs(Patriot.Changelog) do
+    for i, update in ipairs(IxaBuloHub.Changelog) do
         local entry = Instance.new("Frame")
         entry.Size = UDim2.new(1, 0, 0, 0)
         entry.AutomaticSize = Enum.AutomaticSize.Y
         entry.BackgroundTransparency = 1
         entry.LayoutOrder = i * 2
         entry.Parent = scrollFrame
-
         local entryLayout = Instance.new("UIListLayout", entry)
         entryLayout.Padding = UDim.new(0, 5)
-
         local versionLabel = Instance.new("TextLabel")
         versionLabel.Size = UDim2.new(1, 0, 0, 22)
         versionLabel.BackgroundTransparency = 1
@@ -1453,7 +1304,6 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
         versionLabel.TextXAlignment = Enum.TextXAlignment.Left
         versionLabel.LayoutOrder = 1
         versionLabel.Parent = entry
-
         for j, change in ipairs(update.Changes) do
             local changeLabel = Instance.new("TextLabel")
             changeLabel.Size = UDim2.new(1, 0, 0, 0)
@@ -1468,14 +1318,12 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
             changeLabel.LayoutOrder = j + 1
             changeLabel.Parent = entry
         end
-
-        if i < #Patriot.Changelog then
+        if i < #IxaBuloHub.Changelog then
             local divWrapper = Instance.new("Frame")
             divWrapper.Size = UDim2.new(1, 0, 0, 2)
             divWrapper.BackgroundTransparency = 1
             divWrapper.LayoutOrder = i * 2 + 1
             divWrapper.Parent = scrollFrame
-
             local div = Instance.new("Frame")
             div.Size = UDim2.new(1, 0, 0, 1)
             div.BackgroundColor3 = getDivider()
@@ -1484,9 +1332,7 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
             div.Parent = divWrapper
         end
     end
-
     createFlowingBorder(panel, 8, 1, 0.3)
-
     local function toggle(changelogIcon, container, currentContainerWidth)
         isOpen = not isOpen
         if isOpen then
@@ -1501,12 +1347,10 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
             if changelogIcon then TweenService:Create(changelogIcon, TweenInfo.new(0.3), {Rotation = 0}):Play() end
         end
     end
-
     panelClose.MouseButton1Click:Connect(function() if isOpen then toggle(nil, parent, windowWidth) end end)
     return panel, toggle, function() return isOpen end, panelWidth
 end
 
--- Enhanced User Info Panel
 local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth, mainFrame, gap, startOpen)
     panelWidth = panelWidth or 180
     local isOpen = startOpen or false
@@ -1517,7 +1361,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     local valueSize = isCompact and 10 or 11
     local welcomeSize = isCompact and 11 or 12
     local spacing = isCompact and 3 or 5
-
     local panel = Instance.new("Frame")
     panel.Name = "UserInfoPanel"
     panel.Size = UDim2.new(0, isOpen and panelWidth or 0, 0, panelHeight)
@@ -1529,7 +1372,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     panel.ClipsDescendants = true
     panel.Parent = mainFrame
     Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 8)
-
     local panelGradient = Instance.new("UIGradient", panel)
     panelGradient.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0.1),
@@ -1537,12 +1379,10 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
         NumberSequenceKeypoint.new(1, 0.1)
     })
     panelGradient.Rotation = -45
-
     local panelStroke = Instance.new("UIStroke", panel)
     panelStroke.Color = getAccent()
     panelStroke.Thickness = 1
     panelStroke.Transparency = isOpen and 0.3 or 1
-
     local panelHeader = Instance.new("Frame")
     panelHeader.Size = UDim2.new(1, 0, 0, 50)
     panelHeader.BackgroundColor3 = getHeader()
@@ -1550,7 +1390,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     panelHeader.BorderSizePixel = 0
     panelHeader.Parent = panel
     Instance.new("UICorner", panelHeader).CornerRadius = UDim.new(0, 8)
-
     local panelHeaderFix = Instance.new("Frame")
     panelHeaderFix.Size = UDim2.new(1, 0, 0, 8)
     panelHeaderFix.Position = UDim2.new(0, 0, 1, -8)
@@ -1558,7 +1397,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     panelHeaderFix.BackgroundTransparency = 0.85
     panelHeaderFix.BorderSizePixel = 0
     panelHeaderFix.Parent = panelHeader
-
     local panelHeaderLine = Instance.new("Frame")
     panelHeaderLine.Size = UDim2.new(1, 0, 0, 1)
     panelHeaderLine.Position = UDim2.new(0, 0, 1, 0)
@@ -1566,7 +1404,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     panelHeaderLine.BackgroundTransparency = 0.4
     panelHeaderLine.BorderSizePixel = 0
     panelHeaderLine.Parent = panelHeader
-
     local panelHeaderIcon = Instance.new("ImageLabel")
     panelHeaderIcon.Size = UDim2.new(0, 16, 0, 16)
     panelHeaderIcon.Position = UDim2.new(0, 12, 0.5, 0)
@@ -1576,7 +1413,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     panelHeaderIcon.ImageColor3 = getAccent()
     panelHeaderIcon.ScaleType = Enum.ScaleType.Fit
     panelHeaderIcon.Parent = panelHeader
-
     local panelTitle = Instance.new("TextLabel")
     panelTitle.Size = UDim2.new(1, -65, 1, 0)
     panelTitle.Position = UDim2.new(0, 34, 0, 0)
@@ -1587,7 +1423,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     panelTitle.Font = Enum.Font.ArimoBold
     panelTitle.TextXAlignment = Enum.TextXAlignment.Left
     panelTitle.Parent = panelHeader
-
     local panelClose = Instance.new("ImageButton")
     panelClose.Size = UDim2.new(0, 20, 0, 20)
     panelClose.Position = UDim2.new(1, -14, 0.5, 0)
@@ -1599,31 +1434,25 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     panelClose.Parent = panelHeader
     panelClose.MouseEnter:Connect(function() TweenService:Create(panelClose, TweenInfo.new(0.15), {ImageColor3 = getError()}):Play() end)
     panelClose.MouseLeave:Connect(function() TweenService:Create(panelClose, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-
     local contentFrame = Instance.new("Frame")
     contentFrame.Size = UDim2.new(1, 0, 1, -55)
     contentFrame.Position = UDim2.new(0, 0, 0, 55)
     contentFrame.BackgroundTransparency = 1
     contentFrame.Parent = panel
-
     local contentPadding = Instance.new("UIPadding", contentFrame)
     contentPadding.PaddingLeft = UDim.new(0, 8)
     contentPadding.PaddingRight = UDim.new(0, 8)
-
     local contentLayout = Instance.new("UIListLayout", contentFrame)
     contentLayout.Padding = UDim.new(0, spacing)
     contentLayout.SortOrder = Enum.SortOrder.LayoutOrder
     contentLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     contentLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-
     local player = cloneref(Players.LocalPlayer)
-
     local avatarWrapper = Instance.new("Frame")
     avatarWrapper.Size = UDim2.new(0, avatarSize + 6, 0, avatarSize + 6)
     avatarWrapper.BackgroundTransparency = 1
     avatarWrapper.LayoutOrder = 1
     avatarWrapper.Parent = contentFrame
-
     local avatarGlow = Instance.new("Frame")
     avatarGlow.Size = UDim2.new(1, 0, 1, 0)
     avatarGlow.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1633,12 +1462,10 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     avatarGlow.BorderSizePixel = 0
     avatarGlow.Parent = avatarWrapper
     Instance.new("UICorner", avatarGlow).CornerRadius = UDim.new(0, 6)
-
     local avatarGlowStroke = Instance.new("UIStroke", avatarGlow)
     avatarGlowStroke.Color = getAccent()
     avatarGlowStroke.Thickness = 1.5
     avatarGlowStroke.Transparency = 0.3
-
     local avatarContainer = Instance.new("Frame")
     avatarContainer.Size = UDim2.new(0, avatarSize, 0, avatarSize)
     avatarContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1648,7 +1475,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     avatarContainer.ClipsDescendants = true
     avatarContainer.Parent = avatarWrapper
     Instance.new("UICorner", avatarContainer).CornerRadius = UDim.new(0, 6)
-
     local avatarImage = Instance.new("ImageLabel")
     avatarImage.Size = UDim2.new(1, 0, 1, 0)
     avatarImage.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1660,7 +1486,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
         local content = Players:GetUserThumbnailAsync(player and player.UserId or 0, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150)
         avatarImage.Image = content
     end)
-
     local welcomeLabel = Instance.new("TextLabel")
     welcomeLabel.Size = UDim2.new(1, 0, 0, isCompact and 14 or 18)
     welcomeLabel.BackgroundTransparency = 1
@@ -1671,7 +1496,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     welcomeLabel.TextTruncate = Enum.TextTruncate.AtEnd
     welcomeLabel.LayoutOrder = 2
     welcomeLabel.Parent = contentFrame
-
     local divider1 = Instance.new("Frame")
     divider1.Size = UDim2.new(1, 16, 0, 1)
     divider1.Position = UDim2.new(0.5, 0, 0, 0)
@@ -1681,13 +1505,11 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     divider1.BorderSizePixel = 0
     divider1.LayoutOrder = 3
     divider1.Parent = contentFrame
-
     local executorContainer = Instance.new("Frame")
     executorContainer.Size = UDim2.new(1, 0, 0, fieldHeight)
     executorContainer.BackgroundTransparency = 1
     executorContainer.LayoutOrder = 4
     executorContainer.Parent = contentFrame
-
     local executorTitle = Instance.new("TextLabel")
     executorTitle.Size = UDim2.new(1, 0, 0, 11)
     executorTitle.BackgroundTransparency = 1
@@ -1697,7 +1519,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     executorTitle.Font = Enum.Font.ArimoBold
     executorTitle.TextXAlignment = Enum.TextXAlignment.Left
     executorTitle.Parent = executorContainer
-
     local executorValue = Instance.new("TextLabel")
     executorValue.Size = UDim2.new(1, 0, 0, 14)
     executorValue.Position = UDim2.new(0, 0, 0, 11)
@@ -1709,13 +1530,11 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     executorValue.TextXAlignment = Enum.TextXAlignment.Left
     executorValue.TextTruncate = Enum.TextTruncate.AtEnd
     executorValue.Parent = executorContainer
-
     local deviceContainer = Instance.new("Frame")
     deviceContainer.Size = UDim2.new(1, 0, 0, fieldHeight)
     deviceContainer.BackgroundTransparency = 1
     deviceContainer.LayoutOrder = 5
     deviceContainer.Parent = contentFrame
-
     local deviceTitle = Instance.new("TextLabel")
     deviceTitle.Size = UDim2.new(1, 0, 0, 11)
     deviceTitle.BackgroundTransparency = 1
@@ -1725,7 +1544,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     deviceTitle.Font = Enum.Font.ArimoBold
     deviceTitle.TextXAlignment = Enum.TextXAlignment.Left
     deviceTitle.Parent = deviceContainer
-
     local deviceValue = Instance.new("TextLabel")
     deviceValue.Size = UDim2.new(1, 0, 0, 14)
     deviceValue.Position = UDim2.new(0, 0, 0, 11)
@@ -1737,7 +1555,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     deviceValue.TextXAlignment = Enum.TextXAlignment.Left
     deviceValue.TextTruncate = Enum.TextTruncate.AtEnd
     deviceValue.Parent = deviceContainer
-
     local divider2 = Instance.new("Frame")
     divider2.Size = UDim2.new(1, 16, 0, 1)
     divider2.Position = UDim2.new(0.5, 0, 0, 0)
@@ -1747,13 +1564,11 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     divider2.BorderSizePixel = 0
     divider2.LayoutOrder = 6
     divider2.Parent = contentFrame
-
     local hwidContainer = Instance.new("Frame")
     hwidContainer.Size = UDim2.new(1, 0, 0, fieldHeight)
     hwidContainer.BackgroundTransparency = 1
     hwidContainer.LayoutOrder = 7
     hwidContainer.Parent = contentFrame
-
     local hwidTitle = Instance.new("TextLabel")
     hwidTitle.Size = UDim2.new(1, 0, 0, 11)
     hwidTitle.BackgroundTransparency = 1
@@ -1763,12 +1578,10 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     hwidTitle.Font = Enum.Font.ArimoBold
     hwidTitle.TextXAlignment = Enum.TextXAlignment.Left
     hwidTitle.Parent = hwidContainer
-
     local fullHWID = getHWID()
     local copyBtnSize = 18
     local dotAreaWidth = panelWidth - 16 - copyBtnSize - 6
     local hiddenDots = generateHiddenDots(dotAreaWidth, 5)
-
     local hwidValue = Instance.new("TextLabel")
     hwidValue.Size = UDim2.new(1, -(copyBtnSize + 6), 0, 14)
     hwidValue.Position = UDim2.new(0, 0, 0, 11)
@@ -1780,7 +1593,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     hwidValue.TextXAlignment = Enum.TextXAlignment.Left
     hwidValue.TextTruncate = Enum.TextTruncate.AtEnd
     hwidValue.Parent = hwidContainer
-
     local copyBtn = Instance.new("ImageButton")
     copyBtn.Size = UDim2.new(0, copyBtnSize, 0, copyBtnSize)
     copyBtn.Position = UDim2.new(1, 0, 0.5, 1)
@@ -1796,9 +1608,8 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
         pcall(function() setclipboard(fullHWID) end)
         TweenService:Create(copyBtn, TweenInfo.new(0.1), {ImageColor3 = getSuccess()}):Play()
         task.delay(0.3, function() TweenService:Create(copyBtn, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-        Patriot:Notify("Copied", "HWID copied to clipboard", 2, "copy")
+        IxaBuloHub:Notify("Copied", "HWID copied to clipboard", 2, "copy")
     end)
-
     local divider3 = Instance.new("Frame")
     divider3.Size = UDim2.new(1, 16, 0, 1)
     divider3.Position = UDim2.new(0.5, 0, 0, 0)
@@ -1808,26 +1619,22 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     divider3.BorderSizePixel = 0
     divider3.LayoutOrder = 8
     divider3.Parent = contentFrame
-
     local clockContainer = Instance.new("Frame")
     clockContainer.Size = UDim2.new(1, 0, 0, isCompact and 30 or 38)
     clockContainer.BackgroundTransparency = 1
     clockContainer.LayoutOrder = 9
     clockContainer.Parent = contentFrame
-
     local clockRow = Instance.new("Frame")
     clockRow.Size = UDim2.new(1, 0, 0, isCompact and 18 or 22)
     clockRow.Position = UDim2.new(0.5, -8, 0, 0)
     clockRow.AnchorPoint = Vector2.new(0.5, 0)
     clockRow.BackgroundTransparency = 1
     clockRow.Parent = clockContainer
-
     local clockRowLayout = Instance.new("UIListLayout", clockRow)
     clockRowLayout.FillDirection = Enum.FillDirection.Horizontal
     clockRowLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     clockRowLayout.VerticalAlignment = Enum.VerticalAlignment.Center
     clockRowLayout.Padding = UDim.new(0, isCompact and 4 or 6)
-
     local clockIcon = Instance.new("ImageLabel")
     clockIcon.Size = UDim2.new(0, isCompact and 14 or 16, 0, isCompact and 14 or 16)
     clockIcon.BackgroundTransparency = 1
@@ -1836,7 +1643,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     clockIcon.ScaleType = Enum.ScaleType.Fit
     clockIcon.LayoutOrder = 1
     clockIcon.Parent = clockRow
-
     local clockTimeLabel = Instance.new("TextLabel")
     clockTimeLabel.Size = UDim2.new(0, 0, 1, 0)
     clockTimeLabel.AutomaticSize = Enum.AutomaticSize.X
@@ -1847,7 +1653,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     clockTimeLabel.Font = Enum.Font.ArimoBold
     clockTimeLabel.LayoutOrder = 2
     clockTimeLabel.Parent = clockRow
-
     local clockDateLabel = Instance.new("TextLabel")
     clockDateLabel.Size = UDim2.new(1, 0, 0, isCompact and 12 or 14)
     clockDateLabel.Position = UDim2.new(0, -8, 0, isCompact and 18 or 22)
@@ -1858,7 +1663,6 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
     clockDateLabel.Font = Enum.Font.ArimoBold
     clockDateLabel.TextXAlignment = Enum.TextXAlignment.Center
     clockDateLabel.Parent = clockContainer
-
     local clockRunning = true
     task.spawn(function()
         while clockRunning do
@@ -1869,9 +1673,7 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
         end
     end)
     panel.Destroying:Connect(function() clockRunning = false end)
-
     createFlowingBorder(panel, 8, 1, 0.3)
-
     local function toggle(userIcon, container, baseWidth)
         isOpen = not isOpen
         if isOpen then
@@ -1884,15 +1686,12 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
             TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, baseWidth, 0, panelHeight)}):Play()
         end
     end
-
     panelClose.MouseButton1Click:Connect(function() if isOpen then toggle(nil, parent, windowWidth) end end)
     return panel, toggle, function() return isOpen end, panelWidth
 end
 
--- Enhanced Centered UI Builder
 local function BuildCenteredUI(windowWidth, windowHeight, panelHeight, userPanelWidth, changelogPanelWidth, gap, buildContent)
     local gui = buildContent.gui
-
     local container = Instance.new("Frame")
     container.Name = "Container"
     container.Size = UDim2.new(0, windowWidth, 0, panelHeight)
@@ -1900,7 +1699,6 @@ local function BuildCenteredUI(windowWidth, windowHeight, panelHeight, userPanel
     container.AnchorPoint = Vector2.new(0.5, 0.5)
     container.BackgroundTransparency = 1
     container.Parent = gui
-
     local mainFrame = Instance.new("Frame")
     mainFrame.Name = "MainFrame"
     mainFrame.Size = UDim2.new(0, windowWidth, 0, windowHeight)
@@ -1911,7 +1709,6 @@ local function BuildCenteredUI(windowWidth, windowHeight, panelHeight, userPanel
     mainFrame.BorderSizePixel = 0
     mainFrame.Parent = container
     Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 12)
-
     local mainGradient = Instance.new("UIGradient", mainFrame)
     mainGradient.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0.1),
@@ -1919,24 +1716,19 @@ local function BuildCenteredUI(windowWidth, windowHeight, panelHeight, userPanel
         NumberSequenceKeypoint.new(1, 0.1)
     })
     mainGradient.Rotation = 135
-
     local mainStroke = Instance.new("UIStroke", mainFrame)
     mainStroke.Color = getAccent()
     mainStroke.Thickness = 1
     mainStroke.Transparency = 0.4
-
     createFlowingBorder(mainFrame, 12, 2, 0.6)
-
     local userPanel, toggleUserPanel, isUserOpen, userPanelActualWidth = CreateUserInfoPanel(container, windowWidth, panelHeight, userPanelWidth, mainFrame, gap, false)
     local changelogPanel, toggleChangelog, isChangelogOpen, changelogPanelActualWidth = CreateChangelogPanel(container, windowWidth, panelHeight, changelogPanelWidth, mainFrame, gap)
-
     local function getContainerWidth()
         local w = windowWidth
         if isUserOpen() then w = w + gap + userPanelActualWidth end
         if isChangelogOpen() then w = w + gap + changelogPanelActualWidth end
         return w
     end
-
     local function toggleUser(userIcon)
         local currentW = getContainerWidth()
         if isUserOpen() then
@@ -1945,7 +1737,6 @@ local function BuildCenteredUI(windowWidth, windowHeight, panelHeight, userPanel
             toggleUserPanel(userIcon, container, currentW)
         end
     end
-
     local function toggleCL(changelogIcon)
         local currentW = getContainerWidth()
         if isChangelogOpen() then
@@ -1954,13 +1745,11 @@ local function BuildCenteredUI(windowWidth, windowHeight, panelHeight, userPanel
             toggleChangelog(changelogIcon, container, currentW)
         end
     end
-
     local function closeAllPanels(userIcon, changelogIcon, callback)
         if isChangelogOpen() then toggleCL(changelogIcon) task.wait(0.35) end
         if isUserOpen() then toggleUser(userIcon) task.wait(0.35) end
         if callback then callback() end
     end
-
     return {
         container = container,
         mainFrame = mainFrame,
@@ -1975,21 +1764,18 @@ end
 
 local function handleKeylessSkip()
     getgenv().SCRIPT_KEY = "KEYLESS"
-    getgenv().PatriotLoaded = false
-    Patriot:Notify("Access Granted", "Keyless access approved!", 3, "success")
+    getgenv().IxaBuloHubLoaded = false
+    IxaBuloHub:Notify("Access Granted", "Keyless access approved!", 3, "success")
     task.wait(0.3)
-    if Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end
+    if IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end
 end
 
--- Enhanced Keyless UI
 local function BuildKeylessUI()
-    local oldGui = hui:FindFirstChild("PatriotKeylessSystem")
+    local oldGui = hui:FindFirstChild("IxaBuloHubKeylessSystem")
     if oldGui then oldGui:Destroy() end
-    local oldGui2 = hui:FindFirstChild("PatriotKeySystem")
+    local oldGui2 = hui:FindFirstChild("IxaBuloHubKeySystem")
     if oldGui2 then oldGui2:Destroy() end
-
     enableBlur()
-
     local mobile = isMobile()
     local padding = 14
     local windowWidth = 320
@@ -1997,18 +1783,15 @@ local function BuildKeylessUI()
     local userPanelWidth = 165
     local changelogPanelWidth = 200
     local gap = 12
-
     local gui = Instance.new("ScreenGui")
-    gui.Name = "PatriotKeylessSystem"
+    gui.Name = "IxaBuloHubKeylessSystem"
     gui.ResetOnSpawn = false
     gui.IgnoreGuiInset = true
     gui.Parent = hui
-
     local ui = BuildCenteredUI(windowWidth, windowHeight, windowHeight, userPanelWidth, changelogPanelWidth, gap, {gui = gui})
     local container = ui.container
     local main = ui.mainFrame
     local mainStroke = ui.mainStroke
-
     local header = Instance.new("Frame")
     header.Size = UDim2.new(1, 0, 0, 50)
     header.BackgroundColor3 = getHeader()
@@ -2017,7 +1800,6 @@ local function BuildKeylessUI()
     header.Active = true
     header.Parent = main
     Instance.new("UICorner", header).CornerRadius = UDim.new(0, 12)
-
     local headerFix = Instance.new("Frame")
     headerFix.Size = UDim2.new(1, 0, 0, 8)
     headerFix.Position = UDim2.new(0, 0, 1, -8)
@@ -2025,7 +1807,6 @@ local function BuildKeylessUI()
     headerFix.BackgroundTransparency = 0.85
     headerFix.BorderSizePixel = 0
     headerFix.Parent = header
-
     local headerLine = Instance.new("Frame")
     headerLine.Size = UDim2.new(1, 0, 0, 1)
     headerLine.Position = UDim2.new(0, 0, 1, 0)
@@ -2033,7 +1814,6 @@ local function BuildKeylessUI()
     headerLine.BackgroundTransparency = 0.4
     headerLine.BorderSizePixel = 0
     headerLine.Parent = header
-
     local logo = Instance.new("ImageLabel")
     logo.Size = UDim2.new(0, 30, 0, 30)
     logo.Position = UDim2.new(0, padding, 0.5, 0)
@@ -2043,18 +1823,16 @@ local function BuildKeylessUI()
     logo.ImageColor3 = getText()
     logo.ScaleType = Enum.ScaleType.Fit
     logo.Parent = header
-
     local title = Instance.new("TextLabel")
     title.Size = UDim2.new(1, -90, 1, 0)
     title.Position = UDim2.new(0, padding + 40, 0, 0)
     title.BackgroundTransparency = 1
-    title.Text = Patriot.Appearance.Title
+    title.Text = IxaBuloHub.Appearance.Title
     title.TextColor3 = getText()
     title.TextSize = mobile and 24 or 26
     title.Font = Enum.Font.ArimoBold
     title.TextXAlignment = Enum.TextXAlignment.Left
     title.Parent = header
-
     local closeBtn = Instance.new("ImageButton")
     closeBtn.Size = UDim2.new(0, 22, 0, 22)
     closeBtn.Position = UDim2.new(1, -padding, 0.5, 0)
@@ -2066,9 +1844,7 @@ local function BuildKeylessUI()
     closeBtn.Parent = header
     closeBtn.MouseEnter:Connect(function() TweenService:Create(closeBtn, TweenInfo.new(0.15), {ImageColor3 = getError()}):Play() end)
     closeBtn.MouseLeave:Connect(function() TweenService:Create(closeBtn, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-
     local contentY = 60
-
     local successBox = Instance.new("Frame")
     successBox.Size = UDim2.new(0.94, 0, 0, 52)
     successBox.Position = UDim2.new(0.5, 0, 0, contentY)
@@ -2078,12 +1854,10 @@ local function BuildKeylessUI()
     successBox.BorderSizePixel = 0
     successBox.Parent = main
     Instance.new("UICorner", successBox).CornerRadius = UDim.new(0, 8)
-
     local successStroke = Instance.new("UIStroke", successBox)
     successStroke.Color = getSuccess()
     successStroke.Thickness = 1
     successStroke.Transparency = 0.4
-
     local checkIcon = Instance.new("ImageLabel")
     checkIcon.Size = UDim2.new(0, 24, 0, 24)
     checkIcon.Position = UDim2.new(0, 16, 0.5, 0)
@@ -2093,7 +1867,6 @@ local function BuildKeylessUI()
     checkIcon.ImageColor3 = getSuccess()
     checkIcon.ScaleType = Enum.ScaleType.Fit
     checkIcon.Parent = successBox
-
     local successText = Instance.new("TextLabel")
     successText.Size = UDim2.new(1, -60, 1, 0)
     successText.Position = UDim2.new(0, 52, 0, 0)
@@ -2104,7 +1877,6 @@ local function BuildKeylessUI()
     successText.Font = Enum.Font.ArimoBold
     successText.TextXAlignment = Enum.TextXAlignment.Left
     successText.Parent = successBox
-
     local keylessText = Instance.new("TextLabel")
     keylessText.Size = UDim2.new(1, 0, 0, 20)
     keylessText.Position = UDim2.new(0.5, 0, 0, contentY + 60)
@@ -2115,7 +1887,6 @@ local function BuildKeylessUI()
     keylessText.TextSize = mobile and 14 or 15
     keylessText.Font = Enum.Font.ArimoBold
     keylessText.Parent = main
-
     local divider = Instance.new("Frame")
     divider.Size = UDim2.new(1, 0, 0, 2)
     divider.Position = UDim2.new(0, 0, 0, contentY + 88)
@@ -2123,11 +1894,8 @@ local function BuildKeylessUI()
     divider.BackgroundTransparency = 0.5
     divider.BorderSizePixel = 0
     divider.Parent = main
-
     local launchBtn = createEnhancedButton("Launch Script", "shield", true, main, contentY + 103, 0.75)
-
     local bottomY = contentY + 153
-
     local userBtn = Instance.new("TextButton")
     userBtn.Size = UDim2.new(0, 36, 0, 36)
     userBtn.Position = UDim2.new(0.5, -44, 0, bottomY)
@@ -2139,7 +1907,6 @@ local function BuildKeylessUI()
     userBtn.AutoButtonColor = false
     userBtn.Parent = main
     Instance.new("UICorner", userBtn).CornerRadius = UDim.new(0, 8)
-
     local userIcon = Instance.new("ImageLabel")
     userIcon.Size = UDim2.new(0, 18, 0, 18)
     userIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -2151,7 +1918,6 @@ local function BuildKeylessUI()
     userIcon.Parent = userBtn
     userBtn.MouseEnter:Connect(function() TweenService:Create(userIcon, TweenInfo.new(0.15), {ImageColor3 = getAccent()}):Play() end)
     userBtn.MouseLeave:Connect(function() TweenService:Create(userIcon, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-
     local discordBtn = Instance.new("TextButton")
     discordBtn.Size = UDim2.new(0, 36, 0, 36)
     discordBtn.Position = UDim2.new(0.5, 0, 0, bottomY)
@@ -2163,7 +1929,6 @@ local function BuildKeylessUI()
     discordBtn.AutoButtonColor = false
     discordBtn.Parent = main
     Instance.new("UICorner", discordBtn).CornerRadius = UDim.new(0, 8)
-
     local discordIcon = Instance.new("ImageLabel")
     discordIcon.Size = UDim2.new(0, 18, 0, 18)
     discordIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -2175,7 +1940,6 @@ local function BuildKeylessUI()
     discordIcon.Parent = discordBtn
     discordBtn.MouseEnter:Connect(function() TweenService:Create(discordIcon, TweenInfo.new(0.15), {ImageColor3 = getDiscordHover()}):Play() end)
     discordBtn.MouseLeave:Connect(function() TweenService:Create(discordIcon, TweenInfo.new(0.15), {ImageColor3 = getDiscord()}):Play() end)
-
     local changelogBtn = Instance.new("TextButton")
     changelogBtn.Size = UDim2.new(0, 36, 0, 36)
     changelogBtn.Position = UDim2.new(0.5, 44, 0, bottomY)
@@ -2187,7 +1951,6 @@ local function BuildKeylessUI()
     changelogBtn.AutoButtonColor = false
     changelogBtn.Parent = main
     Instance.new("UICorner", changelogBtn).CornerRadius = UDim.new(0, 8)
-
     local changelogIcon = Instance.new("ImageLabel")
     changelogIcon.Size = UDim2.new(0, 18, 0, 18)
     changelogIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -2199,26 +1962,21 @@ local function BuildKeylessUI()
     changelogIcon.Parent = changelogBtn
     changelogBtn.MouseEnter:Connect(function() TweenService:Create(changelogIcon, TweenInfo.new(0.15), {ImageColor3 = getText()}):Play() end)
     changelogBtn.MouseLeave:Connect(function() TweenService:Create(changelogIcon, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-
-    if #Patriot.Changelog == 0 then
+    if #IxaBuloHub.Changelog == 0 then
         changelogBtn.Visible = false
         userBtn.Position = UDim2.new(0.5, -22, 0, bottomY)
         discordBtn.Position = UDim2.new(0.5, 22, 0, bottomY)
     end
-
     local doors = CreateDoorOverlay(main, windowWidth, windowHeight)
-
     userBtn.MouseButton1Click:Connect(function() ui.toggleUser(userIcon) end)
     changelogBtn.MouseButton1Click:Connect(function() ui.toggleCL(changelogIcon) end)
-
     local function closeDoorsThenExit(callback)
         ui.closeAllPanels(userIcon, changelogIcon, function()
             doors.close(function() task.wait(0.3) if callback then callback() end end)
         end)
     end
-
     closeBtn.MouseButton1Click:Connect(function()
-        Patriot:Notify("Goodbye", "See you next time!", 2, "close")
+        IxaBuloHub:Notify("Goodbye", "See you next time!", 2, "close")
         closeDoorsThenExit(function()
             fullCleanup()
             TweenService:Create(container, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {Position = UDim2.new(0.5, 0, -0.5, 0)}):Play()
@@ -2226,30 +1984,27 @@ local function BuildKeylessUI()
             TweenService:Create(mainStroke, TweenInfo.new(0.3), {Transparency = 1}):Play()
             task.wait(0.4) gui:Destroy()
         end)
-        if Patriot.Callbacks.OnClose then Patriot.Callbacks.OnClose() end
+        if IxaBuloHub.Callbacks.OnClose then IxaBuloHub.Callbacks.OnClose() end
     end)
-
     launchBtn.MouseButton1Click:Connect(function()
-        Patriot:Notify("Launching", "Script loaded successfully!", 2, "success")
+        IxaBuloHub:Notify("Launching", "Script loaded successfully!", 2, "success")
         getgenv().SCRIPT_KEY = "KEYLESS"
-        getgenv().PatriotLoaded = false
+        getgenv().IxaBuloHubLoaded = false
         closeDoorsThenExit(function()
             disableBlur()
             TweenService:Create(container, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {Position = UDim2.new(0.5, 0, -0.5, 0)}):Play()
             TweenService:Create(main, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
             TweenService:Create(mainStroke, TweenInfo.new(0.3), {Transparency = 1}):Play()
             task.wait(0.4) gui:Destroy()
-            if not Internal.IsJunkieMode and not Internal.IsWilkinsMode and Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end
+            if not Internal.IsJunkieMode and not Internal.IsWilkinsMode and IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end
         end)
     end)
-
     discordBtn.MouseButton1Click:Connect(function()
-        if Patriot.Links.Discord ~= "" then
-            Patriot:Notify("Discord", "Invite link copied!", 2, "discord")
-            pcall(function() setclipboard(Patriot.Links.Discord) end)
+        if IxaBuloHub.Links.Discord ~= "" then
+            IxaBuloHub:Notify("Discord", "Invite link copied!", 2, "discord")
+            pcall(function() setclipboard(IxaBuloHub.Links.Discord) end)
         end
     end)
-
     setupDragging(header, container)
     TweenService:Create(container, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Position = UDim2.new(0.5, 0, 0.45, 0)}):Play()
     task.wait(0.6)
@@ -2258,19 +2013,16 @@ local function BuildKeylessUI()
         TweenService:Create(checkIcon, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 24, 0, 24)}):Play()
         task.wait(0.2)
         ui.toggleUser(userIcon)
-        if #Patriot.Changelog > 0 then task.wait(0.3) ui.toggleCL(changelogIcon) end
+        if #IxaBuloHub.Changelog > 0 then task.wait(0.3) ui.toggleCL(changelogIcon) end
     end)
 end
 
--- Enhanced Key UI
 local function BuildKeyUI()
-    local oldGui = hui:FindFirstChild("PatriotKeySystem")
+    local oldGui = hui:FindFirstChild("IxaBuloHubKeySystem")
     if oldGui then oldGui:Destroy() end
-    local oldGui2 = hui:FindFirstChild("PatriotKeylessSystem")
+    local oldGui2 = hui:FindFirstChild("IxaBuloHubKeylessSystem")
     if oldGui2 then oldGui2:Destroy() end
-
     enableBlur()
-
     local mobile = isMobile()
     local scale = getScale()
     local padding = 14
@@ -2287,19 +2039,16 @@ local function BuildKeyUI()
     local userPanelWidth = 180
     local changelogPanelWidth = 220
     local gap = 12
-
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "PatriotKeySystem"
+    screenGui.Name = "IxaBuloHubKeySystem"
     screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     screenGui.ResetOnSpawn = false
     screenGui.IgnoreGuiInset = true
     screenGui.Parent = hui
-
     local ui = BuildCenteredUI(windowWidth, windowHeight, baseWindowHeight, userPanelWidth, changelogPanelWidth, gap, {gui = screenGui})
     local container = ui.container
     local mainFrame = ui.mainFrame
     local mainStroke = ui.mainStroke
-
     local header = Instance.new("Frame")
     header.Size = UDim2.new(1, 0, 0, 50)
     header.BackgroundColor3 = getHeader()
@@ -2308,7 +2057,6 @@ local function BuildKeyUI()
     header.Active = true
     header.Parent = mainFrame
     Instance.new("UICorner", header).CornerRadius = UDim.new(0, 12)
-
     local headerFix = Instance.new("Frame")
     headerFix.Size = UDim2.new(1, 0, 0, 6)
     headerFix.Position = UDim2.new(0, 0, 1, -6)
@@ -2316,7 +2064,6 @@ local function BuildKeyUI()
     headerFix.BackgroundTransparency = 0.85
     headerFix.BorderSizePixel = 0
     headerFix.Parent = header
-
     local headerLine = Instance.new("Frame")
     headerLine.Size = UDim2.new(1, 0, 0, 1)
     headerLine.Position = UDim2.new(0, 0, 1, 0)
@@ -2324,9 +2071,8 @@ local function BuildKeyUI()
     headerLine.BackgroundTransparency = 0.4
     headerLine.BorderSizePixel = 0
     headerLine.Parent = header
-
     local logo = Instance.new("ImageLabel")
-    logo.Size = Patriot.Appearance.IconSize
+    logo.Size = IxaBuloHub.Appearance.IconSize
     logo.Position = UDim2.new(0, padding, 0.5, 0)
     logo.AnchorPoint = Vector2.new(0, 0.5)
     logo.BackgroundTransparency = 1
@@ -2334,18 +2080,16 @@ local function BuildKeyUI()
     logo.ImageColor3 = getText()
     logo.ScaleType = Enum.ScaleType.Fit
     logo.Parent = header
-
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Size = UDim2.new(1, -90, 1, 0)
-    titleLabel.Position = UDim2.new(0, padding + Patriot.Appearance.IconSize.X.Offset + 10, 0, 0)
+    titleLabel.Position = UDim2.new(0, padding + IxaBuloHub.Appearance.IconSize.X.Offset + 10, 0, 0)
     titleLabel.BackgroundTransparency = 1
-    titleLabel.Text = Patriot.Appearance.Title
+    titleLabel.Text = IxaBuloHub.Appearance.Title
     titleLabel.TextColor3 = getText()
     titleLabel.TextSize = mobile and 24 or 26
     titleLabel.Font = Enum.Font.ArimoBold
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = header
-
     local closeBtn = Instance.new("ImageButton")
     closeBtn.Size = UDim2.new(0, 22, 0, 22)
     closeBtn.Position = UDim2.new(1, -padding, 0.5, 0)
@@ -2357,18 +2101,12 @@ local function BuildKeyUI()
     closeBtn.Parent = header
     closeBtn.MouseEnter:Connect(function() TweenService:Create(closeBtn, TweenInfo.new(0.15), {ImageColor3 = getError()}):Play() end)
     closeBtn.MouseLeave:Connect(function() TweenService:Create(closeBtn, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-
     local contentStartY = 60
-
-    local statusFrame, statusIcon, statusLabel, statusPulse = createEnhancedStatusFrame(mainFrame, contentStartY, Patriot.Appearance.Subtitle, "lock")
+    local statusFrame, statusIcon, statusLabel, statusPulse = createEnhancedStatusFrame(mainFrame, contentStartY, IxaBuloHub.Appearance.Subtitle, "lock")
     statusPulse()
-
     local inputStartY = contentStartY + statusHeight + 10
-
     local textBox, inputFrame = createEnhancedInput(mainFrame, inputStartY, 0.94, "Enter your key...")
-
     local dividerY = inputStartY + elementHeight + 12
-
     local dividerLine = Instance.new("Frame")
     dividerLine.Size = UDim2.new(1, 0, 0, 2)
     dividerLine.Position = UDim2.new(0, 0, 0, dividerY)
@@ -2376,13 +2114,10 @@ local function BuildKeyUI()
     dividerLine.BackgroundTransparency = 0.5
     dividerLine.BorderSizePixel = 0
     dividerLine.Parent = mainFrame
-
     local acquireStartY = dividerY + 15
-
     local acquireBtn = createEnhancedButton("Get Key", "user", false, mainFrame, acquireStartY, 0.75)
     local redeemBtn = createEnhancedButton("Verify Key", "shield", true, mainFrame, acquireStartY + buttonHeight + 5, 0.75)
     local bottomY = acquireStartY + buttonHeight * 2 + 10
-
     local userBtn = Instance.new("TextButton")
     userBtn.Size = UDim2.new(0, 36, 0, 36)
     userBtn.Position = UDim2.new(0.5, -44, 0, bottomY)
@@ -2394,7 +2129,6 @@ local function BuildKeyUI()
     userBtn.AutoButtonColor = false
     userBtn.Parent = mainFrame
     Instance.new("UICorner", userBtn).CornerRadius = UDim.new(0, 8)
-
     local userIcon = Instance.new("ImageLabel")
     userIcon.Size = UDim2.new(0, 18, 0, 18)
     userIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -2406,7 +2140,6 @@ local function BuildKeyUI()
     userIcon.Parent = userBtn
     userBtn.MouseEnter:Connect(function() TweenService:Create(userIcon, TweenInfo.new(0.15), {ImageColor3 = getAccent()}):Play() end)
     userBtn.MouseLeave:Connect(function() TweenService:Create(userIcon, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-
     local discordBtn = Instance.new("TextButton")
     discordBtn.Size = UDim2.new(0, 36, 0, 36)
     discordBtn.Position = UDim2.new(0.5, 0, 0, bottomY)
@@ -2418,7 +2151,6 @@ local function BuildKeyUI()
     discordBtn.AutoButtonColor = false
     discordBtn.Parent = mainFrame
     Instance.new("UICorner", discordBtn).CornerRadius = UDim.new(0, 8)
-
     local discordIcon = Instance.new("ImageLabel")
     discordIcon.Size = UDim2.new(0, 18, 0, 18)
     discordIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -2430,7 +2162,6 @@ local function BuildKeyUI()
     discordIcon.Parent = discordBtn
     discordBtn.MouseEnter:Connect(function() TweenService:Create(discordIcon, TweenInfo.new(0.15), {ImageColor3 = getDiscordHover()}):Play() end)
     discordBtn.MouseLeave:Connect(function() TweenService:Create(discordIcon, TweenInfo.new(0.15), {ImageColor3 = getDiscord()}):Play() end)
-
     local changelogBtn = Instance.new("TextButton")
     changelogBtn.Size = UDim2.new(0, 36, 0, 36)
     changelogBtn.Position = UDim2.new(0.5, 44, 0, bottomY)
@@ -2442,7 +2173,6 @@ local function BuildKeyUI()
     changelogBtn.AutoButtonColor = false
     changelogBtn.Parent = mainFrame
     Instance.new("UICorner", changelogBtn).CornerRadius = UDim.new(0, 8)
-
     local changelogIcon = Instance.new("ImageLabel")
     changelogIcon.Size = UDim2.new(0, 18, 0, 18)
     changelogIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -2454,13 +2184,11 @@ local function BuildKeyUI()
     changelogIcon.Parent = changelogBtn
     changelogBtn.MouseEnter:Connect(function() TweenService:Create(changelogIcon, TweenInfo.new(0.15), {ImageColor3 = getText()}):Play() end)
     changelogBtn.MouseLeave:Connect(function() TweenService:Create(changelogIcon, TweenInfo.new(0.15), {ImageColor3 = getTextDim()}):Play() end)
-
-    if #Patriot.Changelog == 0 then
+    if #IxaBuloHub.Changelog == 0 then
         changelogBtn.Visible = false
         userBtn.Position = UDim2.new(0.5, -22, 0, bottomY)
         discordBtn.Position = UDim2.new(0.5, 22, 0, bottomY)
     end
-
     if showShop then
         local shopDivider = Instance.new("Frame")
         shopDivider.Size = UDim2.new(1, 0, 0, shopDividerHeight)
@@ -2470,7 +2198,6 @@ local function BuildKeyUI()
         shopDivider.BackgroundTransparency = 0.4
         shopDivider.BorderSizePixel = 0
         shopDivider.Parent = mainFrame
-
         local shopFrame = Instance.new("Frame")
         shopFrame.Size = UDim2.new(1, 0, 0, shopHeight)
         shopFrame.Position = UDim2.new(0, 0, 1, -shopHeight)
@@ -2480,10 +2207,8 @@ local function BuildKeyUI()
         shopFrame.BorderSizePixel = 0
         shopFrame.ClipsDescendants = true
         shopFrame.Parent = mainFrame
-
         local shopCorner = Instance.new("UICorner", shopFrame)
         shopCorner.CornerRadius = UDim.new(0, 12)
-
         local shopTopFix = Instance.new("Frame")
         shopTopFix.Size = UDim2.new(1, 0, 0, 8)
         shopTopFix.Position = UDim2.new(0, 0, 0, 0)
@@ -2491,10 +2216,8 @@ local function BuildKeyUI()
         shopTopFix.BackgroundTransparency = 0.85
         shopTopFix.BorderSizePixel = 0
         shopTopFix.Parent = shopFrame
-
         local shopPadding = 14
         local shopIconSize = 28
-
         local shopIconWrapper = Instance.new("Frame")
         shopIconWrapper.Size = UDim2.new(0, shopIconSize + 4, 0, shopIconSize + 4)
         shopIconWrapper.Position = UDim2.new(0, shopPadding, 0.5, 0)
@@ -2504,12 +2227,10 @@ local function BuildKeyUI()
         shopIconWrapper.BorderSizePixel = 0
         shopIconWrapper.Parent = shopFrame
         Instance.new("UICorner", shopIconWrapper).CornerRadius = UDim.new(0, 6)
-
         local shopIconStroke = Instance.new("UIStroke", shopIconWrapper)
         shopIconStroke.Color = getAccent()
         shopIconStroke.Thickness = 1
         shopIconStroke.Transparency = 0.5
-
         local shopIconImg = Instance.new("ImageLabel")
         shopIconImg.Size = UDim2.new(0, shopIconSize, 0, shopIconSize)
         shopIconImg.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -2519,35 +2240,31 @@ local function BuildKeyUI()
         shopIconImg.ImageColor3 = getText()
         shopIconImg.ScaleType = Enum.ScaleType.Fit
         shopIconImg.Parent = shopIconWrapper
-
         local buyBtnWidth = 60
         local textStartX = shopPadding + shopIconSize + 4 + 10
         local textAreaWidth = windowWidth - textStartX - buyBtnWidth - shopPadding - 8
-
         local shopTitle = Instance.new("TextLabel")
         shopTitle.Size = UDim2.new(0, textAreaWidth, 0, 18)
         shopTitle.Position = UDim2.new(0, textStartX, 0, 9)
         shopTitle.BackgroundTransparency = 1
-        shopTitle.Text = Patriot.Shop.Title
+        shopTitle.Text = IxaBuloHub.Shop.Title
         shopTitle.TextColor3 = getText()
         shopTitle.TextSize = mobile and 13 or 14
         shopTitle.Font = Enum.Font.ArimoBold
         shopTitle.TextXAlignment = Enum.TextXAlignment.Left
         shopTitle.TextTruncate = Enum.TextTruncate.AtEnd
         shopTitle.Parent = shopFrame
-
         local shopSubtitle = Instance.new("TextLabel")
         shopSubtitle.Size = UDim2.new(0, textAreaWidth, 0, 14)
         shopSubtitle.Position = UDim2.new(0, textStartX, 0, 29)
         shopSubtitle.BackgroundTransparency = 1
-        shopSubtitle.Text = Patriot.Shop.Subtitle
+        shopSubtitle.Text = IxaBuloHub.Shop.Subtitle
         shopSubtitle.TextColor3 = getTextDim()
         shopSubtitle.TextSize = mobile and 10 or 11
         shopSubtitle.Font = Enum.Font.ArimoBold
         shopSubtitle.TextXAlignment = Enum.TextXAlignment.Left
         shopSubtitle.TextTruncate = Enum.TextTruncate.AtEnd
         shopSubtitle.Parent = shopFrame
-
         local buyBtn = Instance.new("TextButton")
         buyBtn.Size = UDim2.new(0, buyBtnWidth, 0, 30)
         buyBtn.Position = UDim2.new(1, -shopPadding, 0.5, 0)
@@ -2559,23 +2276,19 @@ local function BuildKeyUI()
         buyBtn.AutoButtonColor = false
         buyBtn.Parent = shopFrame
         Instance.new("UICorner", buyBtn).CornerRadius = UDim.new(0, 6)
-
         local buyBtnStroke = Instance.new("UIStroke", buyBtn)
         buyBtnStroke.Color = getAccentHover()
         buyBtnStroke.Thickness = 1
         buyBtnStroke.Transparency = 0.4
-
         local buyContent = Instance.new("Frame")
         buyContent.Size = UDim2.new(1, 0, 1, 0)
         buyContent.BackgroundTransparency = 1
         buyContent.Parent = buyBtn
-
         local buyLayout = Instance.new("UIListLayout", buyContent)
         buyLayout.FillDirection = Enum.FillDirection.Horizontal
         buyLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
         buyLayout.VerticalAlignment = Enum.VerticalAlignment.Center
         buyLayout.Padding = UDim.new(0, 5)
-
         local buyIcon = Instance.new("ImageLabel")
         buyIcon.Size = UDim2.new(0, 14, 0, 14)
         buyIcon.BackgroundTransparency = 1
@@ -2584,35 +2297,29 @@ local function BuildKeyUI()
         buyIcon.ScaleType = Enum.ScaleType.Fit
         buyIcon.LayoutOrder = 1
         buyIcon.Parent = buyContent
-
         local buyLabel = Instance.new("TextLabel")
         buyLabel.Size = UDim2.new(0, 0, 0, 14)
         buyLabel.AutomaticSize = Enum.AutomaticSize.X
         buyLabel.BackgroundTransparency = 1
-        buyLabel.Text = Patriot.Shop.ButtonText
+        buyLabel.Text = IxaBuloHub.Shop.ButtonText
         buyLabel.TextColor3 = getText()
         buyLabel.TextSize = mobile and 11 or 12
         buyLabel.Font = Enum.Font.ArimoBold
         buyLabel.LayoutOrder = 2
         buyLabel.Parent = buyContent
-
         buyBtn.MouseEnter:Connect(function() TweenService:Create(buyBtn, TweenInfo.new(0.15), {BackgroundColor3 = getAccentHover(), BackgroundTransparency = 0.1}):Play() end)
         buyBtn.MouseLeave:Connect(function() TweenService:Create(buyBtn, TweenInfo.new(0.15), {BackgroundColor3 = getAccent(), BackgroundTransparency = 0.2}):Play() end)
         buyBtn.MouseButton1Click:Connect(function()
-            if Patriot.Shop.Link ~= "" then
-                pcall(function() setclipboard(Patriot.Shop.Link) end)
-                Patriot:Notify("Shop", "Shop link copied to clipboard!", 2, "copy")
+            if IxaBuloHub.Shop.Link ~= "" then
+                pcall(function() setclipboard(IxaBuloHub.Shop.Link) end)
+                IxaBuloHub:Notify("Shop", "Shop link copied to clipboard!", 2, "copy")
             end
         end)
     end
-
     local doors = CreateDoorOverlay(mainFrame, windowWidth, windowHeight)
-
     userBtn.MouseButton1Click:Connect(function() ui.toggleUser(userIcon) end)
     changelogBtn.MouseButton1Click:Connect(function() ui.toggleCL(changelogIcon) end)
-
     local spinConnection, dotsThread
-
     local function setStatus(state, customText)
         if spinConnection then spinConnection:Disconnect() spinConnection = nil statusIcon.Rotation = 0 end
         if dotsThread then task.cancel(dotsThread) dotsThread = nil end
@@ -2635,27 +2342,24 @@ local function BuildKeyUI()
         TweenService:Create(statusIcon, TweenInfo.new(0.3), {ImageColor3 = color}):Play()
         statusLabel.Text = text statusIcon.Image = icon
     end
-
     local function closeDoorsThenExit(callback)
         ui.closeAllPanels(userIcon, changelogIcon, function()
             doors.close(function() task.wait(0.3) if callback then callback() end end)
         end)
     end
-
     closeBtn.MouseButton1Click:Connect(function()
-        Patriot:Notify("Goodbye", "Welcome to use it next time!", 2, "close")
+        IxaBuloHub:Notify("Goodbye", "Welcome to use it next time!", 2, "close")
         closeDoorsThenExit(function()
             fullCleanup()
             TweenService:Create(container, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {Position = UDim2.new(0.5, 0, -0.5, 0)}):Play()
             TweenService:Create(mainFrame, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
             task.wait(0.4) screenGui:Destroy()
-            if Patriot.Callbacks.OnClose then Patriot.Callbacks.OnClose() end
+            if IxaBuloHub.Callbacks.OnClose then IxaBuloHub.Callbacks.OnClose() end
         end)
     end)
-
     local function handleRedeem()
         local key = textBox.Text:gsub("%s+", "")
-        if key == "" then Patriot:Notify("Error", "Please enter your key", 3, "warning") return end
+        if key == "" then IxaBuloHub:Notify("Error", "Please enter your key", 3, "warning") return end
         setStatus("verifying") redeemBtn.Active = false task.wait(0.3)
         local valid, errorMsg = false, "Invalid key"
         if Internal.ValidateFunction then
@@ -2678,74 +2382,71 @@ local function BuildKeyUI()
         end
         redeemBtn.Active = true
         if valid then
-            saveKey(key) getgenv().SCRIPT_KEY = key getgenv().PatriotLoaded = false
-            setStatus("success") Patriot:Notify("Success", "Key validated successfully!", 2, "success") task.wait(1)
+            saveKey(key) getgenv().SCRIPT_KEY = key getgenv().IxaBuloHubLoaded = false
+            setStatus("success") IxaBuloHub:Notify("Success", "Key validated successfully!", 2, "success") task.wait(1)
             closeDoorsThenExit(function()
                 disableBlur()
                 TweenService:Create(container, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {Position = UDim2.new(0.5, 0, -0.5, 0)}):Play()
                 TweenService:Create(mainFrame, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
                 task.wait(0.4) screenGui:Destroy()
-                if not Internal.IsJunkieMode and not Internal.IsWilkinsMode and Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end
+                if not Internal.IsJunkieMode and not Internal.IsWilkinsMode and IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end
             end)
         else
-            setStatus("error", errorMsg) Patriot:Notify("Invalid", errorMsg, 4, "error")
-            if Patriot.Callbacks.OnFail then Patriot.Callbacks.OnFail(errorMsg) end
+            setStatus("error", errorMsg) IxaBuloHub:Notify("Invalid", errorMsg, 4, "error")
+            if IxaBuloHub.Callbacks.OnFail then IxaBuloHub.Callbacks.OnFail(errorMsg) end
         end
     end
-
     redeemBtn.MouseButton1Click:Connect(handleRedeem)
     acquireBtn.MouseButton1Click:Connect(function()
-        if Patriot.Links.GetKey ~= "" then Patriot:Notify("Copied", "Key link copied!", 3, "copy") pcall(function() setclipboard(Patriot.Links.GetKey) end)
-        else Patriot:Notify("Error", "No key link set", 3, "warning") end
+        if IxaBuloHub.Links.GetKey ~= "" then IxaBuloHub:Notify("Copied", "Key link copied!", 3, "copy") pcall(function() setclipboard(IxaBuloHub.Links.GetKey) end)
+        else IxaBuloHub:Notify("Error", "No key link set", 3, "warning") end
     end)
     discordBtn.MouseButton1Click:Connect(function()
-        if Patriot.Links.Discord ~= "" then Patriot:Notify("Discord", "Invite link copied!", 2, "discord") pcall(function() setclipboard(Patriot.Links.Discord) end) end
+        if IxaBuloHub.Links.Discord ~= "" then IxaBuloHub:Notify("Discord", "Invite link copied!", 2, "discord") pcall(function() setclipboard(IxaBuloHub.Links.Discord) end) end
     end)
     textBox.FocusLost:Connect(function(enter) if enter then handleRedeem() end end)
-
     setupDragging(header, container)
     TweenService:Create(container, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Position = UDim2.new(0.5, 0, 0.45, 0)}):Play()
     task.wait(0.6)
     doors.open(function()
         task.wait(0.2)
         ui.toggleUser(userIcon)
-        if #Patriot.Changelog > 0 then task.wait(0.3) ui.toggleCL(changelogIcon) end
+        if #IxaBuloHub.Changelog > 0 then task.wait(0.3) ui.toggleCL(changelogIcon) end
     end)
 end
 
--- Public API
-function Patriot:Launch()
+function IxaBuloHub:Launch()
     Internal.IsJunkieMode = false
     Internal.IsWilkinsMode = false
-    Internal.ValidateFunction = Patriot.Callbacks.OnVerify
+    Internal.ValidateFunction = IxaBuloHub.Callbacks.OnVerify
     local existingKey = getgenv().SCRIPT_KEY
     if existingKey and existingKey ~= "" then
         if existingKey == "KEYLESS" then
-            Patriot:Notify("Executed", "Script loaded successfully!", 2, "success")
-            if Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end return
+            IxaBuloHub:Notify("Executed", "Script loaded successfully!", 2, "success")
+            if IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end return
         elseif Internal.ValidateFunction and validateKey(existingKey, Internal.ValidateFunction) then
-            Patriot:Notify("Executed", "Script loaded successfully!", 2, "success")
-            if Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end return
+            IxaBuloHub:Notify("Executed", "Script loaded successfully!", 2, "success")
+            if IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end return
         end
         getgenv().SCRIPT_KEY = nil
     end
-    getgenv().PatriotClosed = false
+    getgenv().IxaBuloHubClosed = false
     EnsureIconsReady(function()
-        if Patriot.Options.Keyless == true then
-            if Patriot.Options.KeylessUI == false then handleKeylessSkip() return end
+        if IxaBuloHub.Options.Keyless == true then
+            if IxaBuloHub.Options.KeylessUI == false then handleKeylessSkip() return end
             BuildKeylessUI()
             while not getgenv().SCRIPT_KEY do task.wait(0.1) end
             return
         end
-        if Patriot.Storage.AutoLoad and Internal.ValidateFunction then
+        if IxaBuloHub.Storage.AutoLoad and Internal.ValidateFunction then
             local savedKey = loadKey()
             if savedKey and savedKey ~= "" then
-                Patriot:Notify("Checking", "Validating saved key...", 2, "shield") task.wait(0.5)
+                IxaBuloHub:Notify("Checking", "Validating saved key...", 2, "shield") task.wait(0.5)
                 if validateKey(savedKey, Internal.ValidateFunction) then
                     getgenv().SCRIPT_KEY = savedKey
-                    Patriot:Notify("Welcome Back", "Key validated!", 2, "success")
-                    if Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end return
-                else clearKey() Patriot:Notify("Expired", "Saved key is no longer valid", 3, "warning") task.wait(1) end
+                    IxaBuloHub:Notify("Welcome Back", "Key validated!", 2, "success")
+                    if IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end return
+                else clearKey() IxaBuloHub:Notify("Expired", "Saved key is no longer valid", 3, "warning") task.wait(1) end
             end
         end
         BuildKeyUI()
@@ -2753,49 +2454,49 @@ function Patriot:Launch()
     end)
 end
 
-function Patriot:LaunchJunkie(config)
+function IxaBuloHub:LaunchJunkie(config)
     assert(config and config.Service and config.Identifier and config.Provider, "Config required: Service, Identifier, Provider")
     Internal.IsJunkieMode = true
     Internal.IsWilkinsMode = false
     local existingKey = getgenv().SCRIPT_KEY
     if existingKey and existingKey ~= "" then
-        Patriot:Notify("Executed", "Script loaded successfully!", 2, "success")
-        if Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end return
+        IxaBuloHub:Notify("Executed", "Script loaded successfully!", 2, "success")
+        if IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end return
     end
-    getgenv().PatriotClosed = false
+    getgenv().IxaBuloHubClosed = false
     EnsureIconsReady(function()
         local success, Junkie = pcall(function() return loadstring(game:HttpGet("https://jnkie.com/sdk/library.lua"))() end)
-        if not success or not Junkie then Patriot:Notify("Error", "Failed to load Junkie SDK", 5, "error") return end
+        if not success or not Junkie then IxaBuloHub:Notify("Error", "Failed to load Junkie SDK", 5, "error") return end
         Junkie.service = config.Service
         Junkie.identifier = config.Identifier
         Junkie.provider = config.Provider
         Internal.Junkie = Junkie
-        if Patriot.Links.GetKey == "" then pcall(function() Patriot.Links.GetKey = Junkie.get_key_link() end) end
+        if IxaBuloHub.Links.GetKey == "" then pcall(function() IxaBuloHub.Links.GetKey = Junkie.get_key_link() end) end
         Internal.ValidateFunction = function(key) return Junkie.check_key(key) end
-        if Patriot.Options.Keyless == nil then
+        if IxaBuloHub.Options.Keyless == nil then
             local ks, kr = pcall(function() return Junkie.check_key("KEYLESS") end)
             if ks and kr and kr.valid then
-                if Patriot.Options.KeylessUI == false then handleKeylessSkip() return end
+                if IxaBuloHub.Options.KeylessUI == false then handleKeylessSkip() return end
                 BuildKeylessUI()
                 while not getgenv().SCRIPT_KEY do task.wait(0.1) end
                 return
             end
-        elseif Patriot.Options.Keyless == true then
-            if Patriot.Options.KeylessUI == false then handleKeylessSkip() return end
+        elseif IxaBuloHub.Options.Keyless == true then
+            if IxaBuloHub.Options.KeylessUI == false then handleKeylessSkip() return end
             BuildKeylessUI()
             while not getgenv().SCRIPT_KEY do task.wait(0.1) end
             return
         end
-        if Patriot.Storage.AutoLoad then
+        if IxaBuloHub.Storage.AutoLoad then
             local savedKey = loadKey()
             if savedKey and savedKey ~= "" then
-                Patriot:Notify("Checking", "Validating saved key...", 2, "shield") task.wait(0.5)
+                IxaBuloHub:Notify("Checking", "Validating saved key...", 2, "shield") task.wait(0.5)
                 local vs, vr = pcall(function() return Junkie.check_key(savedKey) end)
                 if vs and vr and vr.valid then
                     getgenv().SCRIPT_KEY = savedKey
-                    Patriot:Notify("Welcome Back", "Key validated!", 2, "success")
-                    if Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end return
-                else clearKey() Patriot:Notify("Expired", "Saved key is no longer valid", 3, "warning") task.wait(1) end
+                    IxaBuloHub:Notify("Welcome Back", "Key validated!", 2, "success")
+                    if IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end return
+                else clearKey() IxaBuloHub:Notify("Expired", "Saved key is no longer valid", 3, "warning") task.wait(1) end
             end
         end
         BuildKeyUI()
@@ -2803,26 +2504,24 @@ function Patriot:LaunchJunkie(config)
     end)
 end
 
-function Patriot:LaunchWilkins(config)
+function IxaBuloHub:LaunchWilkins(config)
     assert(config and config.serviceId, "Config required: serviceId")
     Internal.IsJunkieMode = false
     Internal.IsWilkinsMode = true
     local existingKey = getgenv().SCRIPT_KEY
     if existingKey and existingKey ~= "" then
-        Patriot:Notify("Executed", "Script loaded successfully!", 2, "success")
-        if Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end return
+        IxaBuloHub:Notify("Executed", "Script loaded successfully!", 2, "success")
+        if IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end return
     end
-    getgenv().PatriotClosed = false
+    getgenv().IxaBuloHubClosed = false
     EnsureIconsReady(function()
         local wsCtor = (WebSocket and WebSocket.connect)
             or (syn and syn.websocket and syn.websocket.connect)
             or (websocket and websocket.connect)
-        
         if not wsCtor then
-            Patriot:Notify("Error", "Executor does not support WebSocket", 5, "error")
+            IxaBuloHub:Notify("Error", "Executor does not support WebSocket", 5, "error")
             return
         end
-
         local libCode
         do
             local ws = wsCtor("wss://secure.pandauth.com/ws?type=wilkins-lib")
@@ -2833,18 +2532,15 @@ function Patriot:LaunchWilkins(config)
             repeat task.wait(0.05) until libCode or tick() > deadline
             pcall(function() ws:Close() end)
         end
-
         if not libCode then
-            Patriot:Notify("Error", "Failed to fetch Wilkins library (timeout)", 5, "error")
+            IxaBuloHub:Notify("Error", "Failed to fetch Wilkins library (timeout)", 5, "error")
             return
         end
-
         local Wilkins = loadstring(libCode)()
         if not Wilkins or type(Wilkins.configure) ~= "function" then
-            Patriot:Notify("Error", "Wilkins library failed to initialize", 5, "error")
+            IxaBuloHub:Notify("Error", "Wilkins library failed to initialize", 5, "error")
             return
         end
-
         local wilkinsConfig = {
             serviceId = config.serviceId,
             debug = config.debug or false,
@@ -2860,7 +2556,6 @@ function Patriot:LaunchWilkins(config)
         }
         Wilkins.configure(wilkinsConfig)
         Internal.Wilkins = Wilkins
-
         Internal.ValidateFunction = function(key)
             local result = Wilkins.validate(key)
             if result and result.success then
@@ -2869,20 +2564,18 @@ function Patriot:LaunchWilkins(config)
                 return {valid = false, error = result and result.error or "Unknown error"}
             end
         end
-
-        if Patriot.Links.GetKey == "" then
+        if IxaBuloHub.Links.GetKey == "" then
             pcall(function()
                 local info = Wilkins.copyGetKeyUrl()
                 if info and info.url then
-                    Patriot.Links.GetKey = info.url
+                    IxaBuloHub.Links.GetKey = info.url
                 end
             end)
         end
-
-        if Patriot.Options.Keyless == nil then
+        if IxaBuloHub.Options.Keyless == nil then
             local keylessResult = Wilkins.validate("KEYLESS")
             if keylessResult and keylessResult.success then
-                if Patriot.Options.KeylessUI == false then
+                if IxaBuloHub.Options.KeylessUI == false then
                     handleKeylessSkip()
                     task.spawn(function()
                         while Wilkins.isConnected() do task.wait(5) end
@@ -2896,8 +2589,8 @@ function Patriot:LaunchWilkins(config)
                 end)
                 return
             end
-        elseif Patriot.Options.Keyless == true then
-            if Patriot.Options.KeylessUI == false then
+        elseif IxaBuloHub.Options.Keyless == true then
+            if IxaBuloHub.Options.KeylessUI == false then
                 handleKeylessSkip()
                 task.spawn(function()
                     while Wilkins.isConnected() do task.wait(5) end
@@ -2911,33 +2604,30 @@ function Patriot:LaunchWilkins(config)
             end)
             return
         end
-
-        if Patriot.Storage.AutoLoad then
+        if IxaBuloHub.Storage.AutoLoad then
             local savedKey = Wilkins.loadSavedKey() or loadKey()
             if savedKey and savedKey ~= "" then
-                Patriot:Notify("Checking", "Validating saved key...", 2, "shield")
+                IxaBuloHub:Notify("Checking", "Validating saved key...", 2, "shield")
                 task.wait(0.5)
                 local result = Wilkins.validate(savedKey)
                 if result and result.success then
                     getgenv().SCRIPT_KEY = savedKey
-                    Patriot:Notify("Welcome Back", "Key validated!", 2, "success")
+                    IxaBuloHub:Notify("Welcome Back", "Key validated!", 2, "success")
                     task.spawn(function()
                         while Wilkins.isConnected() do task.wait(5) end
                     end)
-                    if Patriot.Callbacks.OnSuccess then Patriot.Callbacks.OnSuccess() end
+                    if IxaBuloHub.Callbacks.OnSuccess then IxaBuloHub.Callbacks.OnSuccess() end
                     return
                 else
                     Wilkins.clearSavedKey()
                     clearKey()
-                    Patriot:Notify("Expired", "Saved key is no longer valid", 3, "warning")
+                    IxaBuloHub:Notify("Expired", "Saved key is no longer valid", 3, "warning")
                     task.wait(1)
                 end
             end
         end
-
         BuildKeyUI()
         while not getgenv().SCRIPT_KEY do task.wait(0.1) end
-        
         task.spawn(function()
             while Internal.Wilkins and Internal.Wilkins.isConnected() do
                 task.wait(5)
@@ -2946,19 +2636,20 @@ function Patriot:LaunchWilkins(config)
     end)
 end
 
-function Patriot:GetSavedKey()
+function IxaBuloHub:GetSavedKey()
     if Internal.IsWilkinsMode and Internal.Wilkins then
         return Internal.Wilkins.loadSavedKey() or loadKey()
     end
     return loadKey()
 end
 
-function Patriot:ClearSavedKey()
+function IxaBuloHub:ClearSavedKey()
     if Internal.IsWilkinsMode and Internal.Wilkins then
         Internal.Wilkins.clearSavedKey()
     end
     return clearKey()
 end
 
-getgenv().Patriot = Patriot
-return Patriot
+getgenv().IxaBuloHub = IxaBuloHub
+getgenv().Patriot = IxaBuloHub
+return IxaBuloHub
