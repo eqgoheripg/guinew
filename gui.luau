@@ -49,12 +49,12 @@ IxaBuloHub.Theme = {
     Accent = Color3.fromRGB(0, 120, 255),
     AccentHover = Color3.fromRGB(30, 144, 255),
     AccentLight = Color3.fromRGB(90, 180, 255),
-    Background = Color3.fromRGB(8, 12, 22),
+    Background = Color3.fromRGB(18, 28, 50),
     BackgroundGlass = Color3.fromRGB(12, 18, 32),
-    Header = Color3.fromRGB(14, 22, 38),
-    Input = Color3.fromRGB(18, 28, 48),
+    Header = Color3.fromRGB(22, 36, 65),
+    Input = Color3.fromRGB(28, 42, 72),
     Text = Color3.fromRGB(255, 255, 255),
-    TextDim = Color3.fromRGB(140, 150, 180),
+    TextDim = Color3.fromRGB(180, 190, 220),
     Success = Color3.fromRGB(50, 205, 110),
     Error = Color3.fromRGB(245, 70, 90),
     Warning = Color3.fromRGB(255, 180, 50),
@@ -703,65 +703,21 @@ local function CreateDoorOverlay(parentFrame, width, height)
     overlay.BackgroundTransparency = 1
     overlay.ClipsDescendants = true
     overlay.ZIndex = 50
+    overlay.Visible = false
     overlay.Parent = parentFrame
-    local leftDoor = Instance.new("Frame")
-    leftDoor.Name = "LeftDoor"
-    leftDoor.Size = UDim2.new(0.5, 0, 1, 0)
-    leftDoor.Position = UDim2.new(0, 0, 0, 0)
-    leftDoor.BackgroundColor3 = getHeader()
-    leftDoor.BorderSizePixel = 0
-    leftDoor.ZIndex = 51
-    leftDoor.Parent = overlay
-    local rightDoor = Instance.new("Frame")
-    rightDoor.Name = "RightDoor"
-    rightDoor.Size = UDim2.new(0.5, 0, 1, 0)
-    rightDoor.Position = UDim2.new(0.5, 0, 0, 0)
-    rightDoor.BackgroundColor3 = getHeader()
-    rightDoor.BorderSizePixel = 0
-    rightDoor.ZIndex = 51
-    rightDoor.Parent = overlay
-    for _, door in ipairs({leftDoor, rightDoor}) do
-        local gradient = Instance.new("UIGradient", door)
-        gradient.Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0),
-            NumberSequenceKeypoint.new(0.5, 0.1),
-            NumberSequenceKeypoint.new(1, 0)
-        })
-        gradient.Rotation = 90
-    end
-    local logoSize = math.min(width, height) * 0.28
+    -- doors disabled to fix vertical seam bug
     local logoImage = Instance.new("ImageLabel")
     logoImage.Name = "DoorLogo"
-    logoImage.Size = UDim2.new(0, logoSize, 0, logoSize)
-    logoImage.Position = UDim2.new(0.5, 0, 0.5, 0)
-    logoImage.AnchorPoint = Vector2.new(0.5, 0.5)
-    logoImage.BackgroundTransparency = 1
-    logoImage.Image = getLogoIcon()
-    logoImage.ImageColor3 = getText()
-    logoImage.ScaleType = Enum.ScaleType.Fit
-    logoImage.ZIndex = 54
+    logoImage.Size = UDim2.new(0, 0, 0, 0)
+    logoImage.Visible = false
     logoImage.Parent = overlay
-    local halfWidth = math.ceil(width / 2)
+    local halfWidth = 0
     local function openDoors(callback)
-        TweenService:Create(logoImage, TweenInfo.new(0.2, Enum.EasingStyle.Quart), {ImageTransparency = 1}):Play()
-        task.wait(0.15)
-        TweenService:Create(leftDoor, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(0, -1, 0, 0)}):Play()
-        TweenService:Create(rightDoor, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(1, 0, 0, 0)}):Play()
-        task.wait(0.5)
         overlay.Visible = false
-        overlay:Destroy()
         if callback then callback() end
     end
     local function closeDoors(callback)
-        overlay.Visible = true
-        leftDoor.Position = UDim2.new(0, -halfWidth, 0, 0)
-        rightDoor.Position = UDim2.new(1, 0, 0, 0)
-        logoImage.ImageTransparency = 1
-        TweenService:Create(leftDoor, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 0, 0, 0)}):Play()
-        TweenService:Create(rightDoor, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0, 0)}):Play()
-        task.wait(0.5)
-        TweenService:Create(logoImage, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {ImageTransparency = 0}):Play()
-        task.wait(0.35)
+        overlay.Visible = false
         if callback then callback() end
     end
     return {overlay = overlay, open = openDoors, close = closeDoors}
@@ -1277,9 +1233,11 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
             div.Parent = divWrapper
         end
     end
+    panel.Visible = false
     createFlowingBorder(panel, 8, 1, 0.3)
     local function toggle(changelogIcon, container, currentContainerWidth)
         isOpen = not isOpen
+        panel.Visible = true
         if isOpen then
             TweenService:Create(panelStroke, TweenInfo.new(0.2), {Transparency = 0.3}):Play()
             TweenService:Create(panel, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, panelWidth, 0, panelHeight)}):Play()
@@ -1290,6 +1248,7 @@ local function CreateChangelogPanel(parent, windowWidth, panelHeight, panelWidth
             TweenService:Create(panel, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, panelHeight)}):Play()
             TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, currentContainerWidth, 0, panelHeight)}):Play()
             if changelogIcon then TweenService:Create(changelogIcon, TweenInfo.new(0.3), {Rotation = 0}):Play() end
+            task.delay(0.32, function() if not isOpen then panel.Visible = false end end)
         end
     end
     panelClose.MouseButton1Click:Connect(function() if isOpen then toggle(nil, parent, windowWidth) end end)
@@ -1618,9 +1577,11 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
         end
     end)
     panel.Destroying:Connect(function() clockRunning = false end)
+    panel.Visible = false
     createFlowingBorder(panel, 8, 1, 0.3)
     local function toggle(userIcon, container, baseWidth)
         isOpen = not isOpen
+        panel.Visible = true
         if isOpen then
             TweenService:Create(panelStroke, TweenInfo.new(0.2), {Transparency = 0.3}):Play()
             TweenService:Create(panel, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, panelWidth, 0, panelHeight)}):Play()
@@ -1629,6 +1590,7 @@ local function CreateUserInfoPanel(parent, windowWidth, panelHeight, panelWidth,
             TweenService:Create(panelStroke, TweenInfo.new(0.2), {Transparency = 1}):Play()
             TweenService:Create(panel, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, panelHeight)}):Play()
             TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0, baseWidth, 0, panelHeight)}):Play()
+            task.delay(0.32, function() if not isOpen then panel.Visible = false end end)
         end
     end
     panelClose.MouseButton1Click:Connect(function() if isOpen then toggle(nil, parent, windowWidth) end end)
