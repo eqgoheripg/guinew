@@ -399,7 +399,7 @@ local function formatDate()
 end
 
 local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowIntensity)
-    cornerRadius = cornerRadius or 4
+    cornerRadius = cornerRadius or 12
     thickness = thickness or 2
     glowIntensity = glowIntensity or 0.5
     local borderContainer = Instance.new("Frame")
@@ -408,10 +408,12 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
     borderContainer.Position = UDim2.new(0, -thickness, 0, -thickness)
     borderContainer.BackgroundTransparency = 1
     borderContainer.ZIndex = (targetFrame.ZIndex or 1) - 1
+    borderContainer.ClipsDescendants = true
     borderContainer.Parent = targetFrame
+    Instance.new("UICorner", borderContainer).CornerRadius = UDim.new(0, cornerRadius + thickness)
     local borderGradient = Instance.new("Frame")
     borderGradient.Size = UDim2.new(1, 0, 1, 0)
-    borderGradient.BackgroundTransparency = 0.85
+    borderGradient.BackgroundTransparency = 1
     borderGradient.BackgroundColor3 = getAccent()
     borderGradient.BorderSizePixel = 0
     borderGradient.ZIndex = borderContainer.ZIndex
@@ -421,7 +423,7 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
     local uiStroke = Instance.new("UIStroke", borderGradient)
     uiStroke.Color = getAccent()
     uiStroke.Thickness = thickness
-    uiStroke.Transparency = 0.3
+    uiStroke.Transparency = 1
     local flowLight = Instance.new("Frame")
     flowLight.Size = UDim2.new(0.3, 0, 1, 0)
     flowLight.Position = UDim2.new(-0.3, 0, 0, 0)
@@ -458,11 +460,18 @@ local function createFlowingBorder(targetFrame, cornerRadius, thickness, glowInt
     shadow.Position = UDim2.new(0, -thickness * 2, 0, -thickness * 2)
     shadow.BackgroundTransparency = 1
     shadow.Image = "rbxassetid://13127777272"
-    shadow.ImageTransparency = 0.6 - glowIntensity * 0.3
+    shadow.ImageTransparency = 1
     shadow.ScaleType = Enum.ScaleType.Slice
     shadow.SliceCenter = Rect.new(20, 20, 20, 20)
     shadow.ZIndex = borderContainer.ZIndex - 1
     shadow.Parent = borderContainer
+    task.delay(1.2, function()
+        if shadow and shadow.Parent then
+            TweenService:Create(shadow, TweenInfo.new(0.4), {ImageTransparency = 0.6 - glowIntensity * 0.3}):Play()
+            TweenService:Create(borderGradient, TweenInfo.new(0.4), {BackgroundTransparency = 0.85}):Play()
+            TweenService:Create(uiStroke, TweenInfo.new(0.4), {Transparency = 0.3}):Play()
+        end
+    end)
     return borderContainer, flowConnection
 end
 
